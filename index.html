@@ -529,10 +529,24 @@ function mouth(){$("#app").innerHTML=`<div class="note">رسومات توضح و
 function me(){const installed=matchMedia("(display-mode: standalone)").matches;const perm=window.Notification?Notification.permission:"غير مدعوم";const dc=Object.keys(S.done).filter(k=>S.done[k]>=70).length;
 $("#app").innerHTML=`<div class="card"><b>🎨 المظهر</b><div class="row" style="margin-top:6px"><button class="b ${S.theme=='light'?'':'s'}" style="flex:1" onclick="S.theme='light';save();render()">☀️ فاتح</button><button class="b ${S.theme=='soft'?'':'s'}" style="flex:1" onclick="S.theme='soft';save();render()">🌙 داكن هادي</button></div></div>
 <div class="card"><b>🔔 تذكير يومي</b><div class="ar">وقت التذكير: <input type="time" value="${S.rem.time}" onchange="S.rem.time=this.value;save();pushCfg()"></div>
-<button class="b w" onclick="setRem(${!S.rem.on})">${S.rem.on?'إيقاف التذكير':'تشغيل التذكير'}</button><button class="b s w" onclick="notify('تجربة: '+taskText())">جرب إشعار الآن</button>
+<button class="b w" onclick="setRem(${!S.rem.on})">${S.rem.on?'إيقاف التذكير':'تشغيل التذكير'}</button><button class="b s w" onclick="notify('تجربة: '+taskText())">جرب إشعار الآن</button><div class="card" style="margin:8px 0"><b>🔊 صوت التذكير</b><div class="ph">النغمة بتشتغل جوه التطبيق لو مفتوح وقت التذكير. صوت الإشعار نفسه بيتحكم فيه أندرويد.</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin:6px 0">${["بدون","نغمة ١","نغمة ٢","نغمة ٣"].map((n,k)=>`<button class="b ${(S.rem.snd==null?1:S.rem.snd)==k?'':'s'}" onclick="S.rem.snd=${k};save();chime(${k});me()">${n}</button>`).join("")}</div>
+<label class="ar"><input type="checkbox" ${S.rem.vib===false?'':'checked'} onchange="S.rem.vib=this.checked;save();if(this.checked)navigator.vibrate&&navigator.vibrate([200,100,200])"> اهتزاز مع التذكير</label>
+<div class="note">اختيار نغمة الإشعار نفسه (من خارج التطبيق): اضغط ضغطة طويلة على إشعار التطبيق أو: إعدادات أندرويد ← التطبيقات ← Chrome (أو التطبيق المثبت) ← الإشعارات ← اختار القناة ← الصوت. أو من كروم: ⋮ ← الإعدادات ← إعدادات الموقع ← الإشعارات ← ahmedashraf096690-commits.github.io.</div></div>
 <div class="note">حالة الإذن: ${perm}. ${installed?'التطبيق مثبت ✅':'التطبيق غير مثبت: التذكير بيشتغل بس وهو مفتوح.'} لو الأندرويد وقف التطبيق في الخلفية ممكن التذكير يتأخر، شغّل "بدون قيود للبطارية" للتطبيق.</div></div>
 <div class="card"><b>🧾 إحصائيات</b><div class="ar">XP: ${S.xp} · المستوى ${lvl()}<br>دروس مكتملة: ${dc} / ${LESSONS.length}<br>أيام تدريب: ${Object.keys(S.days).length}<br>مرات المراجعة: ${S.revs}<br>كلمات في المراجعة الذكية: ${Object.keys(S.sr).length}</div></div>
 <div class="card"><button class="b r w" style="background:#c0392b" onclick="if(confirm('مسح كل التقدم؟')){localStorage.removeItem('eng2');location.reload()}">مسح التقدم</button></div>`}
 try{if("serviceWorker" in navigator&&location.protocol.startsWith("http")){navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.update()));let had=!!navigator.serviceWorker.controller;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(had&&!sessionStorage.rl){sessionStorage.rl=1;location.reload()}had=true})}}catch(e){}
 render();
+
+// ---- reminder sound (in-app chime + vibration) ----
+let AC=null;function acx(){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();return AC}catch(e){return null}}
+["touchstart","click","keydown"].forEach(ev=>document.addEventListener(ev,()=>acx(),{once:true,passive:true}));
+const CHIMES=[null,[[784,0],[988,.18],[1175,.36],[1568,.6]],[[659,0],[523,.25],[659,.5],[784,.75]],[[880,0],[880,.2],[1175,.4],[880,.8],[1175,1]]];
+function chime(k){const m=CHIMES[k==null?(S.rem&&S.rem.snd==null?1:S.rem.snd):k];if(!m)return;const a=acx();if(!a)return;const t0=a.currentTime;
+m.forEach(([f,d])=>{const o=a.createOscillator(),g=a.createGain();o.type="sine";o.frequency.value=f;o.connect(g);g.connect(a.destination);g.gain.setValueAtTime(0,t0+d);g.gain.linearRampToValueAtTime(.35,t0+d+.02);g.gain.exponentialRampToValueAtTime(.001,t0+d+.45);o.start(t0+d);o.stop(t0+d+.5)})}
+async function notify(txt){const t="🔔 وقت إنجليزي";const vib=S.rem.vib===false?undefined:[300,150,300,150,500];
+try{chime()}catch(e){}if(vib&&navigator.vibrate)try{navigator.vibrate(vib)}catch(e){}
+const o={body:txt,tag:"daily",renotify:true,requireInteraction:true,vibrate:vib,silent:false};
+const r=await swReg();if(r&&r.showNotification)return r.showNotification(t,o);if(window.Notification&&Notification.permission==="granted")new Notification(t,o)}
 </script></body></html>
