@@ -23,7 +23,7 @@ jobs:
       - name: Capacitor
         run: |
           npm init -y
-          npm install @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6 @capacitor/local-notifications@6
+          npm install @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6 @capacitor/local-notifications@6 @capacitor-community/text-to-speech@6
           npx cap add android
           npx cap sync android
       - name: Customize
