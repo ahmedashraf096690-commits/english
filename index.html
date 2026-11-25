@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#1f6f5c">
+<title>إنجليزي من الصفر</title>
+<style>
+:root{--bg:#f6f1e7;--ink:#1d2433;--mut:#6b7385;--pri:#1f6f5c;--pri2:#e3f1ec;--bad:#c0392b;--ok:#1f8a4c;--line:#e6dfd0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;line-height:1.6}
+header{padding:12px 16px;background:var(--pri);color:#fff;position:sticky;top:0;z-index:5}header h1{margin:0;font-size:18px}header small{opacity:.85}
+main{max-width:640px;margin:0 auto;padding:12px 14px 90px}
+nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:6}
+nav button{flex:1;border:0;background:none;padding:8px 2px;font-size:12px;color:var(--mut);font-family:inherit}nav button b{display:block;font-size:20px;font-weight:400}nav button.on{color:var(--pri);font-weight:700}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;margin:10px 0}
+.en{direction:ltr;text-align:left;font-size:24px;font-weight:700;unicode-bidi:isolate}.ph{color:var(--mut);font-size:15px}.ar{font-size:18px}
+.row{display:flex;align-items:center;gap:10px;justify-content:space-between}
+.b{background:var(--pri);color:#fff;border:0;border-radius:12px;padding:11px 16px;font-size:16px;font-family:inherit;margin:4px 0 4px 6px}.b.s{background:var(--pri2);color:var(--pri)}.b.w{width:100%}
+.b:disabled{opacity:.4}
+.opt{display:block;width:100%;background:#fff;border:2px solid var(--line);border-radius:12px;padding:12px;font-size:18px;font-family:inherit;margin:6px 0}
+.opt.ok{border-color:var(--ok);background:#e7f6ec}.opt.no{border-color:var(--bad);background:#fbe9e7}.opt.l{direction:ltr}
+.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;background:var(--pri)}
+.note{background:#fff7dd;border:1px solid #efdf9c;border-radius:12px;padding:10px;font-size:14px;margin:10px 0}
+.les{display:flex;gap:12px;align-items:center}.les .n{width:38px;height:38px;border-radius:50%;background:var(--pri2);color:var(--pri);display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}
+.les.done .n{background:var(--pri);color:#fff}.les.lock{opacity:.5}
+h2{font-size:17px;margin:16px 0 4px}.tag{font-size:12px;background:var(--pri2);color:var(--pri);border-radius:8px;padding:1px 8px}
+.big{font-size:44px;font-weight:800;direction:ltr;color:var(--pri)}
+svg.mouth{width:100%;max-width:340px;display:block;margin:0 auto;background:#fdf8f0;border-radius:12px}
+.item{padding:8px 0;border-bottom:1px solid var(--line)}.item:last-child{border:0}
+input[type=time]{font-size:18px;padding:6px;border-radius:8px;border:1px solid var(--line)}
+</style></head><body>
+<header><h1>إنجليزي من الصفر إلى C1</h1><small id="sub"></small></header>
+<main id="app"></main><nav id="nav"></nav>
+<script>
+const LET=[
+["A","إيه","أ مفتوحة مثل «أَ» في apple (مش آ)","apple","تفاحة","🍎"],["B","بي","ب عادية: شفتين مقفولين وصوت من الحلق","ball","كورة","⚽","B"],
+["C","سي","ك قبل a/o/u (cat) وس قبل e/i (city)","cat","قطة","🐱"],["D","دي","د عادية","dog","كلب","🐶"],
+["E","إي","إ قصيرة (egg) أو إييي طويلة","egg","بيضة","🥚"],["F","إف","ف: سنان فوق على الشفة التحتانية بدون صوت","fish","سمكة","🐟","F"],
+["G","جي","جـ مثل go (جيم القاهرية) أو ج مثل gem","go","يروح","➡️"],["H","إتش","هاء خفيفة: نفَس هادي","hat","قبعة","🎩"],
+["I","آي","إ قصيرة (it) أو آي (ice)","ice","تلج","🧊"],["J","جيه","ج","juice","عصير","🧃"],
+["K","كيه","ك","key","مفتاح","🔑"],["L","إل","ل: طرف اللسان على لثة الأسنان العليا","lion","أسد","🦁","L"],
+["M","إم","م","milk","لبن","🥛"],["N","إن","ن","nose","أنف","👃"],
+["O","أو","أو","orange","برتقال","🍊"],["P","بي","ب بدون صوت: شفتين مقفولين ونفخة هواء","pen","قلم","🖊️","P"],
+["Q","كيو","كيو (kw)","queen","ملكة","👑"],["R","آر","ر إنجليزية: اللسان مرفوع ومش بيلمس سقف الحلق","red","أحمر","🔴","R"],
+["S","إس","س","sun","شمس","☀️"],["T","تي","ت مع نفخة هواء خفيفة","tea","شاي","🍵"],
+["U","يو","أ مثل cup أو يو مثل user","cup","كوب","☕"],["V","في","ڤ: سنان فوق على الشفة التحتانية مع صوت","very","جدا","❗","V"],
+["W","دابليو","و","water","ماء","💧"],["X","إكس","كس","box","صندوق","📦"],
+["Y","واي","ي","yes","نعم","✅"],["Z","زِد","ز","zoo","حديقة حيوان","🦓"]];
+const DIG=[["SH","إس إتش","ش","ship","سفينة","🚢"],["CH","سي إتش","تش","chair","كرسي","🪑"],["TH","تي إتش","ث أو ذ: طرف اللسان بين السنان","think","يفكر","💭","TH"],["NG","إن جي","نج: صوت أنفي بدون جيم","sing","يغني","🎤"]];
+const pairs=(a,b)=>[LET[a],LET[b]];
+const LESSONS=[
+{t:"التحيات",e:"👋",L:pairs(0,1),n:"I am = أنا. في الإنجليزي لازم فعل (am / is / are) في الجملة، مفيش جملة من غير فعل زي العربي.",
+w:[["Hello","هالو","مرحبا"],["Goodbye","جودباي","مع السلامة"],["Yes","يس","نعم"],["No","نو","لا"],["Please","بليز","من فضلك"],["Thank you","ثانك يو","شكرا"]],
+s:[["Hello, how are you?","هالو، هاو آر يو","مرحبا، كيف حالك؟"],["I am fine, thank you.","آي آم فاين، ثانك يو","أنا بخير شكرا."],["Goodbye, see you tomorrow.","جودباي، سي يو تومورو","مع السلامة، أراك غدا."]]},
+{t:"التعارف",e:"🤝",L:pairs(2,3),n:"my = بتاعي / ـي. My name = اسمي. is مع he/she/it، am مع I، are مع you/we/they.",
+w:[["name","نيم","اسم"],["from","فروم","من (مكان)"],["Egypt","إيجيبت","مصر"],["friend","فرِند","صديق"],["nice","نايس","لطيف"],["meet","ميت","يقابل"]],
+s:[["My name is Ahmed.","ماي نيم إز أحمد","اسمي أحمد."],["I am from Egypt.","آي آم فروم إيجيبت","أنا من مصر."],["Nice to meet you.","نايس تو ميت يو","سعيد بمقابلتك."]]},
+{t:"الأرقام ١-٥",e:"🔢",L:pairs(4,5),n:"الجمع بإضافة s: book → books. بنستخدم الجمع بعد أي رقم أكبر من واحد.",
+w:[["one","وان","١"],["two","تو","٢"],["three","ثري","٣"],["four","فور","٤"],["five","فايف","٥"],["zero","زيرو","صفر"]],
+s:[["I have two books.","آي هاف تو بوكس","عندي كتابين."],["There are three chairs.","ذير آر ثري تشيرز","في ٣ كراسي."],["I want four apples.","آي وونت فور أبلز","أريد ٤ تفاحات."]]},
+{t:"الأرقام ٦-١٠",e:"🔟",L:pairs(6,7),n:"How old are you? = كم عمرك؟ والرد: I am 19 years old.",
+w:[["six","سيكس","٦"],["seven","سيفن","٧"],["eight","إيت","٨"],["nine","ناين","٩"],["ten","تن","١٠"],["number","نامبر","رقم"]],
+s:[["She is ten years old.","شي إز تن يِرز أولد","عمرها ١٠ سنين."],["I need seven days.","آي نيد سيفن دايز","أحتاج ٧ أيام."],["Eight plus two is ten.","إيت بلس تو إز تن","٨ + ٢ = ١٠."]]},
+{t:"العائلة",e:"👨‍👩‍👧",L:pairs(8,9),n:"have = عندي. I have / you have / he has.",
+w:[["mother","مَذر","أم"],["father","فاذر","أب"],["brother","برادر","أخ"],["sister","سيستر","أخت"],["family","فاملي","عائلة"],["son","سَن","ابن"]],
+s:[["This is my mother.","ذيس إز ماي مذر","هذه أمي."],["I have one brother.","آي هاف وان برادر","عندي أخ واحد."],["My family is big.","ماي فاملي إز بيج","عائلتي كبيرة."]]},
+{t:"أكل وشرب",e:"🍞",L:pairs(10,11),n:"للسؤال: Do you like...? وللنفي: I don't like...",
+w:[["water","ووتر","ماء"],["bread","بريد","عيش"],["tea","تي","شاي"],["coffee","كوفي","قهوة"],["milk","ميلك","لبن"],["food","فود","أكل"]],
+s:[["I want water, please.","آي وونت ووتر، بليز","أريد ماء من فضلك."],["Do you like tea?","دو يو لايك تي","هل تحب الشاي؟"],["I don't like coffee.","آي دونت لايك كوفي","لا أحب القهوة."]]},
+{t:"الألوان",e:"🎨",L:pairs(12,13),n:"الصفة قبل الاسم: blue shirt (مش shirt blue).",
+w:[["red","ريد","أحمر"],["blue","بلو","أزرق"],["green","جرين","أخضر"],["black","بلاك","أسود"],["white","وايت","أبيض"],["yellow","يلو","أصفر"]],
+s:[["The car is red.","ذا كار إز ريد","السيارة حمراء."],["I like the blue shirt.","آي لايك ذا بلو شيرت","أحب القميص الأزرق."],["The sky is blue.","ذا سكاي إز بلو","السماء زرقاء."]]},
+{t:"الوقت",e:"⏰",L:pairs(14,15),n:"in the morning (الصبح) / at night (بالليل) / on Monday (يوم الاثنين).",
+w:[["today","تودي","النهارده"],["tomorrow","تومورو","بكرة"],["morning","مورنينج","صباح"],["night","نايت","ليل"],["day","داي","يوم"],["week","ويك","أسبوع"]],
+s:[["See you tomorrow.","سي يو تومورو","أشوفك بكرة."],["Good morning!","جود مورنينج","صباح الخير!"],["I study every day.","آي ستادي إيفري داي","أذاكر كل يوم."]]},
+{t:"البيت",e:"🏠",L:pairs(16,17),n:"this = ده/دي (قريب)، that = ده/دي (بعيد). on = على، in = في.",
+w:[["house","هاوس","بيت"],["door","دور","باب"],["window","ويندو","شباك"],["room","روم","أوضة"],["table","تيبل","ترابيزة"],["chair","تشير","كرسي"]],
+s:[["This is my house.","ذيس إز ماي هاوس","ده بيتي."],["Open the door, please.","أوبن ذا دور، بليز","افتح الباب من فضلك."],["The book is on the table.","ذا بوك إز أون ذا تيبل","الكتاب على الترابيزة."]]},
+{t:"أفعال أساسية",e:"🏃",L:pairs(18,19),n:"مع he / she / it نضيف s للفعل: go → goes، eat → eats.",
+w:[["eat","إيت","يأكل"],["drink","درينك","يشرب"],["go","جو","يروح"],["come","كام","يجي"],["want","وونت","يريد"],["like","لايك","يحب"]],
+s:[["I eat breakfast at eight.","آي إيت بريكفست آت إيت","أفطر الساعة ٨."],["She goes to school.","شي جوز تو سكول","هي بتروح المدرسة."],["We want to learn English.","وي وونت تو لرن إنجليش","عايزين نتعلم إنجليزي."]]},
+{t:"المدرسة",e:"🎓",L:pairs(20,21),n:"a قبل الاسم المفرد: a student. an قبل حرف متحرك: an apple.",
+w:[["book","بوك","كتاب"],["pen","بن","قلم"],["school","سكول","مدرسة"],["teacher","تيتشر","مدرس"],["student","ستيودنت","طالب"],["learn","لرن","يتعلم"]],
+s:[["I am a student.","آي آم إيه ستيودنت","أنا طالب."],["The teacher is kind.","ذا تيتشر إز كايند","المدرس لطيف."],["I learn new words every day.","آي لرن نيو وردز إيفري داي","أتعلم كلمات جديدة كل يوم."]]},
+{t:"أماكن",e:"🏙️",L:pairs(22,23),n:"Where is...? للسؤال عن مكان. near = قريب، far = بعيد.",
+w:[["city","سيتي","مدينة"],["street","ستريت","شارع"],["shop","شوب","محل"],["market","ماركت","سوق"],["hospital","هوسبيتل","مستشفى"],["airport","إيربورت","مطار"]],
+s:[["Where is the market?","وير إز ذا ماركت","فين السوق؟"],["The hospital is near here.","ذا هوسبيتل إز نير هير","المستشفى قريب من هنا."],["I live in Giza.","آي ليف إن جيزة","أنا ساكن في الجيزة."]]},
+{t:"المشاعر",e:"😊",L:pairs(24,25),n:"للسؤال اقلب الترتيب: You are hungry → Are you hungry?",
+w:[["happy","هابي","سعيد"],["sad","ساد","حزين"],["tired","تايرد","تعبان"],["hungry","هنجري","جعان"],["thirsty","ثيرستي","عطشان"],["good","جود","كويس"]],
+s:[["I am very tired.","آي آم فيري تايرد","أنا تعبان جدا."],["Are you hungry?","آر يو هنجري","إنت جعان؟"],["She is happy today.","شي إز هابي تودي","هي سعيدة النهارده."]]},
+{t:"جمل البقاء",e:"🆘",L:DIG,n:"Can you...? = ممكن...؟ وهي طريقة مؤدبة للطلب.",
+w:[["help","هلب","مساعدة"],["understand","أندرستاند","يفهم"],["repeat","ريبيت","يعيد"],["slowly","سلولي","ببطء"],["sorry","سوري","آسف"],["where","وير","فين"]],
+s:[["I need help.","آي نيد هلب","أحتاج مساعدة."],["I don't understand.","آي دونت أندرستاند","لا أفهم."],["Can you repeat, please?","كان يو ريبيت، بليز","ممكن تعيد من فضلك؟"]]}];
+const MOUTH={
+B:["الشفتين مقفولين تماما ثم يتفتحوا بسرعة. الصوت بيهتز في الحلق (حط إيدك على رقبتك).","شفتين"],
+P:["نفس وضع B: شفتين مقفولين، لكن من غير صوت من الحلق. حط إيدك قدام بقك وهتحس بنفخة هواء.","شفتين"],
+F:["السنان العليا على الشفة التحتانية، وانفخ هواء من غير صوت من الحلق.","سنان + شفة"],
+V:["نفس وضع F: السنان العليا على الشفة التحتانية، لكن مع اهتزاز في الحلق.","سنان + شفة"],
+L:["طرف اللسان بيلمس اللثة فوق السنان العليا مباشرة، والصوت بيعدي من جنب اللسان.","طرف اللسان"],
+R:["اللسان بيتجمع ويرجع لورا، وطرفه مرفوع من غير ما يلمس سقف الحلق. ما بيرفش زي الراء العربي.","اللسان لا يلمس"],
+TH:["طرف اللسان بين السنان العليا والتحتانية، وانفخ هواء. think = ث من غير اهتزاز، this = ذ مع اهتزاز.","بين السنان"]};
+let S={};try{S=JSON.parse(localStorage.getItem("eng2")||"{}")}catch(e){}
+S.done=S.done||{};S.unit=S.unit||{};S.wrong=S.wrong||{};S.days=S.days||{};S.rem=S.rem||{on:false,time:"20:00"};S.revs=S.revs||0;
+const save=()=>{try{localStorage.setItem("eng2",JSON.stringify(S))}catch(e){}};
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+const $=s=>document.querySelector(s);const esc=s=>String(s).replace(/'/g,"\\'");
+const shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
+// ---- audio (device TTS) ----
+let V=[];const lv=()=>{try{V=speechSynthesis.getVoices()}catch(e){}};lv();try{speechSynthesis.onvoiceschanged=lv}catch(e){}
+function say(t,lang,rate){if(!window.speechSynthesis)return alert("جهازك لا يدعم الصوت");speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=lang||"en-US";
+const v=V.find(v=>v.lang.replace("_","-")===u.lang)||V.find(v=>v.lang.toLowerCase().startsWith(u.lang.slice(0,2)));if(v)u.voice=v;u.rate=rate||(lang&&lang.startsWith("ar")?1:.9);speechSynthesis.speak(u)}
+const sayAr=t=>say(t,"ar-EG",.95);
+// ---- data helpers ----
+const items=l=>[...LESSONS[l].w.map(x=>({en:x[0],ph:x[1],ar:x[2],k:"w",l})),...LESSONS[l].s.map(x=>({en:x[0],ph:x[1],ar:x[2],k:"s",l}))];
+const ALL=LESSONS.flatMap((_,i)=>items(i));
+const UNITS=[[0,6],[7,13]];const unitOf=l=>l<7?0:1;
+const doneCount=()=>Object.keys(S.done).length;
+const unitReady=u=>{for(let i=UNITS[u][0];i<=UNITS[u][1];i++)if(!(S.done[i]>=70))return false;return true};
+// ---- questions ----
+function mkQ(it,type){const pool=ALL.filter(x=>x.k===it.k&&x.en!==it.en);
+if(type==="let"){const lt=LESSONS[it.l].L[0];const L=LET.concat(DIG);return{type,p:`${lt[5]} ${lt[3]}`,en:true,say:lt[3],ans:lt[0],opts:shuf([lt[0],...shuf(LET.filter(x=>x[0]!==lt[0])).slice(0,3).map(x=>x[0])]),ask:"الكلمة دي بتبدأ بأنهي حرف؟",it:{en:lt[3],wr:lt[0]}}}
+const o=shuf(pool).slice(0,3);
+if(type==="e2a")return{type,p:it.en,en:true,say:it.en,ask:"معنى الجملة/الكلمة؟",ans:it.ar,opts:shuf([it.ar,...o.map(x=>x.ar)]),it,};
+if(type==="a2e")return{type,p:it.ar,ask:"إزاي نقولها بالإنجليزي؟",ans:it.en,opts:shuf([it.en,...o.map(x=>x.en)]),lopt:true,it};
+return{type:"lis",p:"🔊",ask:"اسمع واختار المعنى",say:it.en,auto:true,ans:it.ar,opts:shuf([it.ar,...o.map(x=>x.ar)]),it}}
+function mkTest(list,n,withLet){const qs=shuf(list).slice(0,n).map((it,i)=>mkQ(it,["e2a","a2e","lis"][i%3]));
+if(withLet)qs.splice(Math.min(2,qs.length),0,mkQ(list[0],"let"),mkQ(list[0],"let"));return qs}
+// ---- UI state ----
+let tab="home",view=null,T=null,tab0=[["home","🏠","الرئيسية"],["course","📚","الدروس"],["review","🔁","مراجعة"],["mouth","👄","نطق"],["me","⚙️","أنا"]];
+function nav(){$("#nav").innerHTML=tab0.map(t=>`<button class="${t[0]==tab?'on':''}" onclick="go('${t[0]}')"><b>${t[1]}</b>${t[2]}</button>`).join("")}
+function go(t){tab=t;view=null;T=null;render()}
+function render(){nav();$("#sub").textContent=`${doneCount()} من ${LESSONS.length} درس مكتمل`;
+if(T)return testV();if(view&&view.lesson!=null)return lessonV();
+({home,course,review,mouth,me})[tab]();scrollTo(0,0)}
+// ---- home ----
+function nextTask(){for(let i=0;i<LESSONS.length;i++)if(!(S.done[i]>=70))return i;return -1}
+function streak(){let n=0;const d=new Date();for(;;){const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");if(S.days[k]){n++;d.setDate(d.getDate()-1)}else if(n==0&&k===today()){d.setDate(d.getDate()-1)}else break}return n}
+function home(){const n=nextTask(),pct=Math.round(doneCount()/LESSONS.length*100);const doneToday=!!S.days[today()];
+$("#app").innerHTML=`<div class="card"><b>أهلا يا أحمد 👋</b><div class="ar">${streak()} يوم متتالي · تقدمك ${pct}%</div><div class="bar" style="margin-top:8px"><i style="width:${pct}%"></i></div></div>
+<div class="card"><span class="tag">مهمة النهارده ${doneToday?'✅ اتعملت':''}</span>${n>=0?`<div class="ar" style="margin:6px 0">الدرس ${n+1}: ${LESSONS[n].e} ${LESSONS[n].t}</div><button class="b w" onclick="openLesson(${n})">ابدأ الدرس</button>`:`<div class="ar">خلصت كل دروس A1 🎉</div>`}
+${doneCount()>=3?`<button class="b s w" onclick="go('review')">🔁 مراجعة سريعة (٥ دقايق)</button>`:''}</div>
+<h2>خريطة الطريق</h2>`+[["A1","مبتدئ: ١٤ درس في النموذج","on"],["A2","روتين، ماضي بسيط، تسوق، اتجاهات",""],["B1","تجارب، مستقبل، آراء",""],["B2","نقاش، قراءة مقالات، شغل",""],["C1","طلاقة، أسلوب، كتابة رسمية",""]].map(r=>`<div class="card les ${r[2]?'':'lock'}"><div class="n" style="border-radius:10px;width:46px">${r[0]}</div><div>${r[1]}${r[2]?'':'<br><small class="ph">قريبا</small>'}</div></div>`).join("")}
+// ---- course ----
+function course(){let h="";for(let u=0;u<2;u++){h+=`<h2>الوحدة ${u+1}</h2>`;for(let i=UNITS[u][0];i<=UNITS[u][1];i++){const d=S.done[i];h+=`<div class="card les ${d>=70?'done':''}" onclick="openLesson(${i})"><div class="n">${d>=70?'✓':i+1}</div><div style="flex:1"><b>${LESSONS[i].e} ${LESSONS[i].t}</b><div class="ph">${LESSONS[i].L[0][0]}${LESSONS[i].L[1]?' · '+LESSONS[i].L[1][0]:''} · ${LESSONS[i].w.length} كلمات · ${LESSONS[i].s.length} جمل${d!=null?' · آخر نتيجة '+d+'%':''}</div></div></div>`}
+const r=unitReady(u),ut=S.unit[u];h+=`<div class="card les ${r?'':'lock'}"><div class="n">🏁</div><div style="flex:1"><b>اختبار الوحدة ${u+1}</b><div class="ph">${r?'جاهز'+(ut!=null?' · آخر نتيجة '+ut+'%':''):'يفتح بعد إنهاء دروس الوحدة'}</div></div><button class="b" ${r?'':'disabled'} onclick="startUnit(${u})">ابدأ</button></div>`}
+$("#app").innerHTML=h;}
+function openLesson(i){tab="course";view={lesson:i,step:0};render()}
+// ---- lesson ----
+function lessonV(){const i=view.lesson,L=LESSONS[i];const steps=["حروف","كلمات","جمل","قاعدة"];let b="";
+const tabs=`<div class="row" style="margin:6px 0">${steps.map((s,k)=>`<button class="b ${k==view.step?'':'s'}" style="flex:1;margin:0 2px;padding:8px 2px;font-size:14px" onclick="view.step=${k};render()">${s}</button>`).join("")}</div>`;
+if(view.step==0){b=`<div class="note">حروف وأصوات الدرس. اسمع كل مثال وكرره بصوت عالي.</div>`+L.L.map(l=>`<div class="card"><div class="row"><div class="big">${l[0]}</div><div style="flex:1"><div class="ar"><b>${l[1]}</b></div><div class="ph">${l[2]}</div><div class="en" style="font-size:20px">${l[5]} ${l[3]} <span class="ph" style="font-size:14px">(${l[4]})</span></div></div></div><button class="b s" onclick="say('${l[3]}')">🔊 ${l[3]}</button><button class="b s" onclick="say('${l[3]}','en-US',.5)">🐢</button>${l[6]?`<button class="b s" onclick="mouthOpen('${l[6]}')">👄 شوف وضع الفم</button>`:''}</div>`).join("")}
+else if(view.step==1)b=L.w.map(w=>`<div class="card"><div class="row"><div><div class="en">${w[0]}</div><div class="ph">النطق: ${w[1]}</div><div class="ar">${w[2]}</div></div><div><button class="b s" onclick="say('${esc(w[0])}')">🔊</button><button class="b s" onclick="say('${esc(w[0])}','en-US',.5)">🐢</button></div></div></div>`).join("");
+else if(view.step==2)b=L.s.map(w=>`<div class="card"><div class="en" style="font-size:20px">${w[0]}</div><div class="ph">النطق: ${w[1]}</div><div class="ar">${w[2]}</div><button class="b s" onclick="say('${esc(w[0])}')">🔊</button><button class="b s" onclick="say('${esc(w[0])}','en-US',.5)">🐢</button></div>`).join("");
+else b=`<div class="card"><b>📘 شرح القاعدة</b><div class="ar" style="margin:8px 0">${L.n}</div><button class="b s" onclick="sayAr('${esc(L.n)}')">🔊 اسمع الشرح بالعربي</button><div class="ph">الصوت العربي بيعتمد على الأصوات المنزّلة في تليفونك.</div></div>`;
+$("#app").innerHTML=`<div class="row"><b>الدرس ${i+1}: ${L.e} ${L.t}</b><button class="b s" onclick="view=null;render()">رجوع</button></div>${tabs}${b}<button class="b w" onclick="startLesson(${i})">✍️ ابدأ اختبار الدرس</button>`;scrollTo(0,0)}
+function startLesson(i){T={name:`اختبار الدرس ${i+1}`,qs:mkTest(items(i),8,true),i:0,ok:0,pass:70,after:p=>{S.done[i]=Math.max(S.done[i]||0,p)},back:"lesson",les:i}; render()}
+function startUnit(u){const l=[];for(let i=UNITS[u][0];i<=UNITS[u][1];i++)l.push(...items(i));T={name:`اختبار الوحدة ${u+1}`,qs:mkTest(l,15,false),i:0,ok:0,pass:75,after:p=>{S.unit[u]=Math.max(S.unit[u]||0,p)},back:"course"};render()}
+function startReview(){const d=Object.keys(S.done).filter(k=>S.done[k]>=70).map(Number);if(!d.length)return;const l=d.flatMap(items).map(x=>({x,w:(S.wrong[x.en]||0)+Math.random()*2})).sort((a,b)=>b.w-a.w).slice(0,10).map(o=>o.x);
+T={name:"اختبار مراجعة",qs:mkTest(l,10,false),i:0,ok:0,pass:70,after:p=>{S.revs++;S.rv=today()},back:"review"};tab="review";render()}
+function review(){const d=Object.keys(S.done).filter(k=>S.done[k]>=70).length;const wr=Object.entries(S.wrong).sort((a,b)=>b[1]-a[1]).slice(0,8);
+$("#app").innerHTML=`<div class="card"><b>🔁 اختبار مراجعة</b><div class="ar">بيجمع ١٠ أسئلة من الدروس اللي خلصتها، وبيركز على الكلمات اللي بتغلط فيها. الأفضل كل ٣ دروس.</div>${d?`<button class="b w" onclick="startReview()">ابدأ المراجعة</button>`:'<div class="note">خلص درس واحد على الأقل الأول.</div>'}</div>
+${wr.length?`<h2>كلمات محتاجة تركيز</h2><div class="card">${wr.map(w=>`<div class="item row"><span class="en" style="font-size:18px">${w[0]}</span><span class="tag">غلطات: ${w[1]}</span></div>`).join("")}</div>`:''}`}
+// ---- test ----
+function testV(){const q=T.qs[T.i];if(!q){const p=Math.round(T.ok/T.qs.length*100),pass=p>=T.pass;T.after(p);S.days[today()]=(S.days[today()]||0)+1;save();
+$("#app").innerHTML=`<div class="card" style="text-align:center"><div style="font-size:48px">${pass?'🎉':'💪'}</div><b>${T.name}: ${p}%</b><div class="ar">${pass?'نجحت! الدرس اتحسب.':`محتاج ${T.pass}% عشان تعدي. راجع الدرس وحاول تاني.`}</div></div><button class="b w" onclick="${T.back=='lesson'?`T=null;view={lesson:${T.les},step:0};render()`:`go('${T.back}')`}">${T.back=='lesson'?'رجوع للدرس':'تمام'}</button>${pass&&T.back=='lesson'?`<button class="b s w" onclick="go('home')">الرئيسية</button>`:''}`;return}
+$("#app").innerHTML=`<div class="ph">${T.name} · ${T.i+1}/${T.qs.length}</div><div class="bar"><i style="width:${T.i/T.qs.length*100}%"></i></div><div class="card"><div class="ar">${q.ask}</div><div class="${q.en?'en':'ar'}" style="margin:8px 0;${q.en?'':'font-size:24px'}">${q.p}</div>${q.say?`<button class="b s" onclick="say('${esc(q.say)}')">🔊</button>`:''}</div>${q.opts.map((o,k)=>`<button class="opt ${q.lopt||q.type=='let'?'l':''} ${q.d!=null?(o===q.ans?'ok':q.d===k?'no':''):''}" ${q.d!=null?'disabled':''} onclick="pick(${k})">${o}</button>`).join("")}${q.d!=null?`<button class="b w" onclick="T.i++;render()">التالي</button>`:''}`;
+if(q.auto&&!q.played){q.played=1;setTimeout(()=>say(q.say),300)}}
+function pick(k){const q=T.qs[T.i];q.d=k;const ok=q.opts[k]===q.ans;if(ok)T.ok++;else if(q.it){const w=q.it.en;S.wrong[w]=(S.wrong[w]||0)+1}save();render()}
+// ---- mouth diagrams ----
+function mouthSvg(k){const tongue={
+L:"M185 130 Q150 112 110 108 Q80 104 62 80 Q54 68 50 68 L46 74 Q50 98 66 118 Q120 150 185 140 Z",
+R:"M185 132 Q165 86 135 90 Q115 94 105 76 L97 80 Q96 100 88 116 Q120 150 185 140 Z",
+TH:"M185 130 Q140 108 90 110 L34 102 L32 116 Q60 126 90 122 Q140 148 185 140 Z"}[k]||"M185 134 Q140 118 90 122 Q60 124 50 124 L50 134 Q110 156 185 142 Z";
+const closed=k=="B"||k=="P",lip=(k=="F"||k=="V");
+const up=closed?"M8 54 Q10 90 28 95":"M8 54 Q10 78 28 84";
+const lo=closed?"M8 136 Q12 100 28 97":lip?"M8 136 Q14 104 31 88":"M8 136 Q12 106 28 106";
+const mark={L:[50,68],R:[100,62],TH:[34,108],F:[31,88],V:[31,88],B:[28,96],P:[28,96]}[k];
+const air=(k=="P")?`<path d="M4 96 L-0 96" stroke="#c0392b"/>`:"";
+return `<svg class="mouth" viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg"><path d="M28 60 Q60 46 100 48 Q150 50 190 72" fill="none" stroke="#8a5a3c" stroke-width="5"/><path d="M190 72 L190 132" stroke="#8a5a3c" stroke-width="5"/><path d="M28 132 Q100 165 190 134" fill="none" stroke="#8a5a3c" stroke-width="5"/><path d="${tongue}" fill="#e88a8a" stroke="#c75d5d" stroke-width="2"/><rect x="26" y="60" width="14" height="26" rx="4" fill="#fff" stroke="#bbb"/><rect x="28" y="104" width="14" height="24" rx="4" fill="#fff" stroke="#bbb"/><path d="${up}" fill="none" stroke="#e0868f" stroke-width="10" stroke-linecap="round"/><path d="${lo}" fill="none" stroke="#e0868f" stroke-width="10" stroke-linecap="round"/><circle cx="${mark[0]}" cy="${mark[1]}" r="9" fill="none" stroke="#c0392b" stroke-width="2.5" stroke-dasharray="4 3"/><text x="150" y="40" font-size="11" fill="#6b7385" text-anchor="middle">سقف الحلق</text><text x="110" y="172" font-size="11" fill="#6b7385" text-anchor="middle">اللسان</text><text x="34" y="34" font-size="11" fill="#6b7385" text-anchor="middle">الشفاه</text></svg>`}
+const MORD=["R","L","TH","F","V","B","P"];
+function mouth(){$("#app").innerHTML=`<div class="note">رسومات توضح وضع اللسان والشفايف. الدايرة الحمرا مكان الحركة. اسمع المثال بعد ما تشوف الرسمة.</div>`+MORD.map(k=>mouthCard(k)).join("")}
+function mouthCard(k){const ex={R:"red, right, around",L:"light, lion, hello",TH:"think, this, mother",F:"fish, fine, off",V:"very, video, love",B:"ball, baby, job",P:"pen, paper, stop"}[k];
+return `<div class="card" id="m${k}"><b dir="ltr" style="font-size:22px">${k}</b>${mouthSvg(k)}<div class="ar" style="margin:8px 0">${MOUTH[k][0]}</div><div class="en" style="font-size:18px">${ex}</div>${ex.split(", ").map(w=>`<button class="b s" onclick="say('${w}','en-US',.6)">🔊 ${w}</button>`).join("")}<button class="b s" onclick="sayAr('${esc(MOUTH[k][0])}')">🔊 شرح بالعربي</button></div>`}
+function mouthOpen(k){tab="mouth";view=null;T=null;render();setTimeout(()=>{const e=document.getElementById("m"+k);if(e)e.scrollIntoView()},50)}
+// ---- reminder ----
+async function swReg(){try{return await navigator.serviceWorker.getRegistration()}catch(e){}}
+async function notify(txt){const t="🔔 وقت إنجليزي";const r=await swReg();if(r&&r.showNotification)return r.showNotification(t,{body:txt,icon:undefined,tag:"daily"});if(window.Notification&&Notification.permission==="granted")new Notification(t,{body:txt})}
+function taskText(){const n=nextTask();return n>=0?`مهمة النهارده: الدرس ${n+1} (${LESSONS[n].t})`:"وقت المراجعة اليومية"}
+async function pushCfg(){try{const c=await caches.open("eng-cfg");await c.put("cfg",new Response(JSON.stringify({on:S.rem.on,time:S.rem.time,text:taskText()})))}catch(e){}}
+async function setRem(on){if(on){if(!window.Notification)return alert("المتصفح لا يدعم الإشعارات");const p=await Notification.requestPermission();if(p!=="granted"){S.rem.on=false;save();return me()}
+try{const r=await swReg();if(r&&r.periodicSync)await r.periodicSync.register("daily",{minInterval:12*3600*1000})}catch(e){}}
+S.rem.on=on;save();pushCfg();me()}
+function tickRem(){if(!S.rem.on)return;const d=new Date(),hm=String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");
+if(hm>=S.rem.time&&S.remLast!==today()&&!S.days[today()]){S.remLast=today();save();notify(taskText())}}
+setInterval(tickRem,30000);document.addEventListener("visibilitychange",tickRem);
+function me(){const installed=matchMedia("(display-mode: standalone)").matches;const perm=window.Notification?Notification.permission:"غير مدعوم";
+$("#app").innerHTML=`<div class="card"><b>🔔 تذكير يومي</b><div class="ar">وقت التذكير: <input type="time" value="${S.rem.time}" onchange="S.rem.time=this.value;save();pushCfg()"></div>
+<button class="b w" onclick="setRem(${!S.rem.on})">${S.rem.on?'إيقاف التذكير':'تشغيل التذكير'}</button><button class="b s w" onclick="notify('تجربة: '+taskText())">جرب إشعار الآن</button>
+<div class="note">حالة الإذن: ${perm}. ${installed?'التطبيق مثبت ✅':'التطبيق غير مثبت: التذكير بيشتغل بس وهو مفتوح.'} لو الأندرويد وقف التطبيق في الخلفية ممكن التذكير يتأخر، شغّل "بدون قيود للبطارية" للتطبيق.</div></div>
+<div class="card"><b>🧾 إحصائيات</b><div class="ar">دروس مكتملة: ${doneCount()} / ${LESSONS.length}<br>أيام تدريب: ${Object.keys(S.days).length}<br>مرات المراجعة: ${S.revs}</div></div>
+<div class="card"><button class="b r w" style="background:#c0392b" onclick="if(confirm('مسح كل التقدم؟')){localStorage.removeItem('eng2');location.reload()}">مسح التقدم</button></div>`}
+if("serviceWorker" in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("sw.js").then(pushCfg);
+render();
+
+</script></body></html>
