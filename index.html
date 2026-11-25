@@ -466,11 +466,11 @@ const al=lv.ui.every(unitReady);h+=`<div class="card les "><div class="n">${lv.k
 h+=`<h1 id="lv-F" style="font-size:20px;margin:22px 0 0">🏆 امتحانا تحديد المستوى</h1><div class="card les"><div style="flex:1"><b>امتحان تحديد المستوى ١</b><div class="ph">٥٠ سؤال من كل المستويات (A1 إلى C1) · تقدير تقريبي${S.exam&&S.exam.F1!=null?' · آخر نتيجة '+S.exam.F1+'%':''}</div></div><button class="b" onclick="startFinal(1)">ابدأ</button></div><div class="card les"><div style="flex:1"><b>امتحان تحديد المستوى ٢</b><div class="ph">أسئلة مختلفة · قارن نتيجتك${S.exam&&S.exam.F2!=null?' · آخر نتيجة '+S.exam.F2+'%':''}</div></div><button class="b" onclick="startFinal(2)">ابدأ</button></div>`;
 $("#app").innerHTML=h}
 function lvlEst(p){return p<30?"A1":p<50?"A2":p<65?"B1":p<80?"B2":"C1"}
-function startFinal(n){const rs=[[0,CORE_N-1],[38,57]];LEVELS.forEach(l=>rs.push([l.r[0],l.r[1]]));let qs=[];rs.forEach(r=>{const l=[];for(let i=r[0];i<=r[1];i++)if(i%2==n%2)l.push(...items(i));qs.push(...mkTest(l,10,false))});T={name:"امتحان تحديد المستوى "+n,qs:qs,i:0,ok:0,pass:80,after:p=>{S.exam=S.exam||{};S.exam["F"+n]=p;setTimeout(()=>alert("تقدير مستواك تقريبا: "+lvlEst(p)+" (تقدير مبني على نتيجتك الكلية، مش شهادة)"),300)},back:"course"};render()}
-function startExamL(k){const lv=LEVELS.find(x=>x.k==k),l=[];for(let i=lv.r[0];i<=lv.r[1];i++)l.push(...items(i));T={name:"امتحان "+k,qs:mkTest(l,30,false),i:0,ok:0,pass:80,after:p=>{S.exam=S.exam||{};S.exam[k]=Math.max(S.exam[k]||0,p)},back:"course"};render()}
-function startExam2(){const l=[];for(let i=38;i<=57;i++)l.push(...items(i));T={name:"امتحان A2",qs:mkTest(l,25,false),i:0,ok:0,pass:80,after:p=>{S.exam=S.exam||{};S.exam.A2=Math.max(S.exam.A2||0,p)},back:"course"};render()}
-function startExam(){const l=[];for(let i=0;i<CORE_N;i++)l.push(...items(i));T={name:"امتحان A1",qs:mkTest(l,25,false),i:0,ok:0,pass:80,after:p=>{S.exam=S.exam||{};S.exam.A1=Math.max(S.exam.A1||0,p)},back:"course"};render()}
-function startUnit(u){const l=[];for(let i=UNITS[u][0];i<=UNITS[u][1];i++)l.push(...items(i));T={name:`اختبار الوحدة ${u+1}`,qs:mkTest(l,15,false),i:0,ok:0,pass:75,after:p=>{S.unit[u]=Math.max(S.unit[u]||0,p)},back:(u==4||u==8||LEVELS.some(l=>l.cu==u))?"call":"course"};render()}
+function startFinal(n){const rs=[[0,CORE_N-1],[38,57]];LEVELS.forEach(l=>rs.push([l.r[0],l.r[1]]));let qs=[];rs.forEach(r=>{const l=[];for(let i=r[0];i<=r[1];i++)if(i%2==n%2)l.push(...items(i));qs.push(...mkTest(l,10,false))});T={name:"امتحان تحديد المستوى "+n,qs:qs,i:0,ok:0,pass:75,after:p=>{S.exam=S.exam||{};S.exam["F"+n]=p;setTimeout(()=>alert("تقدير مستواك تقريبا: "+lvlEst(p)+" (تقدير مبني على نتيجتك الكلية، مش شهادة)"),300)},back:"course"};render()}
+function startExamL(k){const lv=LEVELS.find(x=>x.k==k),l=[];for(let i=lv.r[0];i<=lv.r[1];i++)l.push(...items(i));T={name:"امتحان "+k,qs:mkTest(l,30,false),i:0,ok:0,pass:75,after:p=>{S.exam=S.exam||{};S.exam[k]=Math.max(S.exam[k]||0,p)},back:"course"};render()}
+function startExam2(){const l=[];for(let i=38;i<=57;i++)l.push(...items(i));T={name:"امتحان A2",qs:mkTest(l,25,false),i:0,ok:0,pass:75,after:p=>{S.exam=S.exam||{};S.exam.A2=Math.max(S.exam.A2||0,p)},back:"course"};render()}
+function startExam(){const l=[];for(let i=0;i<CORE_N;i++)l.push(...items(i));T={name:"امتحان A1",qs:mkTest(l,25,false),i:0,ok:0,pass:75,after:p=>{S.exam=S.exam||{};S.exam.A1=Math.max(S.exam.A1||0,p)},back:"course"};render()}
+function startUnit(u){const l=[];for(let i=UNITS[u][0];i<=UNITS[u][1];i++)l.push(...items(i));T={name:`اختبار الوحدة ${u+1}`,qs:mkTest(l,15,false),i:0,ok:0,pass:70,after:p=>{S.unit[u]=Math.max(S.unit[u]||0,p)},back:(u==4||u==8||LEVELS.some(l=>l.cu==u))?"call":"course"};render()}
 // ---- call-center tab ----
 function call(){let h=`<div class="hero"><div><b style="font-size:19px">🎧 إنجليزي الكول سنتر</b><div>جمل ومكالمات حقيقية، من أول يوم</div></div></div>`;
 h+=`<h2>الوحدة ١: أساسيات المكالمة</h2>`;for(let i=CCR1[0];i<=CCR1[1];i++)h+=lessonRow(i);const r4=unitReady(4);h+=`<div class="card les "><div class="n">🏁</div><div style="flex:1"><b>اختبار الوحدة ١</b></div><button class="b"  onclick="startUnit(4)">ابدأ</button></div><h2>الوحدة ٢: مواقف صعبة ودعم فني</h2>`;for(let i=CCR2[0];i<=CCR2[1];i++)h+=lessonRow(i);const r8=unitReady(8);h+=`<div class="card les "><div class="n">🏁</div><div style="flex:1"><b>اختبار الوحدة ٢</b></div><button class="b"  onclick="startUnit(8)">ابدأ</button></div>`;
@@ -497,7 +497,7 @@ else if(view.step==2)b=L.s.map(w=>`<div class="card"><div class="en" style="font
 else if(view.step==4){const hide=view.hide;b=`<div class="note">اضغط «اخفِ كلام الموظف»، قل جملة الموظف (أو الشخص A) بصوتك، وبعدين اسمعها وقارن. خلي حد يمثل الدور التاني أو مثّله بنفسك.</div><button class="b s w" onclick="view.hide=!view.hide;render()">${hide?'أظهر كلام الموظف':'اخفِ كلام الموظف'}</button>`+L.d.map(x=>`<div class="card" style="${x[0]=='A'?'border-right:5px solid var(--pri)':''}"><b>${isCC(i)?(x[0]=='A'?'🧑‍💼 الموظف':x[0]=='C'?'🙋 العميل':'🧑‍🏫 زميل/مشرف'):(x[0]=='A'?'🗣️ A':'🗨️ B')}</b>${x[0]=='A'&&hide?'<div class="ph">النص مخفي... قلها بصوتك</div>':`<div class="en" style="font-size:18px">${x[1]}</div><div class="ar">${x[2]}</div>`}${btn(x[1])}</div>`).join("")}
 else b=`<div class="card"><b>📘 شرح القاعدة</b><div class="ar" style="margin:8px 0">${L.n}</div><button class="b s" onclick="sayAr('${esc(L.n)}')">🔊 اسمع الشرح بالعربي</button><div class="ph">الصوت العربي بيعتمد على الأصوات المنزّلة في تليفونك.</div></div>${L.tip?`<div class="card" style="border-right:5px solid var(--pri)"><b>💡 نصيحة محترفين</b><div class="ar" style="margin:8px 0">${L.tip}</div><button class="b s" onclick="sayAr('${esc(L.tip)}')">🔊 اسمع النصيحة</button></div>`:''}`;
 $("#app").innerHTML=`<div class="row"><b>${isCC(i)?'🎧 كول سنتر':(L.lv?L.lv+' · الدرس '+L.ln:(i>=38?'A2 · الدرس '+(i-37):'الدرس '+(i+1)))}: ${L.e} ${L.t}</b><button class="b s" onclick="view=null;render()">رجوع</button></div>${tabs}${b}<button class="b w" onclick="startLesson(${i})">✍️ ابدأ اختبار الدرس</button>`;scrollTo(0,0)}
-function startLesson(i){T={name:`اختبار: ${LESSONS[i].t}`,qs:mkTest(items(i),8,true),i:0,ok:0,pass:70,after:p=>{S.done[i]=Math.max(S.done[i]||0,p);if(p>=70)S.xp+=20},back:"lesson",les:i};render()}
+function startLesson(i){T={name:`اختبار: ${LESSONS[i].t}`,qs:mkTest(items(i),10,true),i:0,ok:0,pass:70,after:p=>{S.done[i]=Math.max(S.done[i]||0,p);if(p>=70)S.xp+=20},back:"lesson",les:i};render()}
 // ---- shadowing recorder (no scoring: play model then your own voice) ----
 let rec=null;
 async function shadow(t,btn){const el=btn&&btn.nextElementSibling;
@@ -549,4 +549,45 @@ async function notify(txt){const t="🔔 وقت إنجليزي";const vib=S.rem.
 try{chime()}catch(e){}if(vib&&navigator.vibrate)try{navigator.vibrate(vib)}catch(e){}
 const o={body:txt,tag:"daily",renotify:true,requireInteraction:true,vibrate:vib,silent:false};
 const r=await swReg();if(r&&r.showNotification)return r.showNotification(t,o);if(window.Notification&&Notification.permission==="granted")new Notification(t,o)}
+
+// ---- harder questions: typed, reorder, dictation, cloze, error spotting, close distractors ----
+const nrm=s=>String(s).toLowerCase().replace(/[’‘]/g,"'").replace(/[.,!?;:"“”]/g,"").replace(/\s+/g," ").trim();
+const toks=s=>s.replace(/[.,!?]/g,"").split(/\s+/).filter(Boolean);
+function lev(a,b){const m=a.length,n=b.length,d=[...Array(m+1)].map((_,i)=>[i,...Array(n).fill(0)]);for(let j=0;j<=n;j++)d[0][j]=j;for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]==b[j-1]?0:1));return d[m][n]}
+const lessonTokens=l=>[...new Set(items(l).flatMap(x=>toks(x.en)).filter(t=>/^[A-Za-z']+$/.test(t)))];
+function closeTok(t,l){const lt=t.toLowerCase();let c=lessonTokens(l).filter(x=>x.toLowerCase()!=lt&&Math.abs(x.length-t.length)<=2);
+if(c.length<3){c=c.concat(shuf(ALL.flatMap(x=>toks(x.en)).filter(x=>/^[A-Za-z']+$/.test(x)&&x.toLowerCase()!=lt&&Math.abs(x.length-t.length)<=2)))}
+return [...new Set(shuf(c).map(x=>x))].slice(0,3)}
+function qCloze(it){const s=it.k=="s"?it:null;let sent=null,tgt=null;
+if(it.k=="s"){const tk=toks(it.en).map((t,i)=>[t,i]).filter(x=>x[0].length>=3&&/^[A-Za-z']+$/.test(x[0]));if(tk.length<3)return null;const p=tk[Math.floor(Math.random()*tk.length)];tgt=p[0];const w=it.en.split(/\s+/);w[w.findIndex(x=>x.replace(/[.,!?]/g,"")==tgt)]="_____";sent=w.join(" ")}
+else{const r=new RegExp("\\b"+it.en.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"\\b","i");const c=LESSONS[it.l].s.find(x=>r.test(x[0]));if(!c)return null;sent=c[0].replace(r,"_____");tgt=it.en;if(/\s/.test(tgt))return null}
+const d=closeTok(tgt,it.l);if(d.length<3)return null;
+return{type:"cloze",p:sent,en:true,ask:"اكمل الجملة بالكلمة الصح:",ans:tgt,opts:shuf([tgt,...d]),lopt:true,it,hint:it.ar}}
+function qSpot(it){const t=toks(it.en);if(t.length<4)return null;const bad=new Set(),mk1=()=>{const a=it.en.split(/\s+/),m=Math.floor(Math.random()*3);
+if(m==0){const i=Math.floor(Math.random()*(a.length-1));[a[i],a[i+1]]=[a[i+1],a[i]]}else if(m==1){const i=Math.floor(Math.random()*a.length);const x=a[i].replace(/[.,!?]/g,"");if(x.length<3)return null;const c=closeTok(x,it.l);if(!c.length)return null;a[i]=a[i].replace(x,c[0])}else{const i=1+Math.floor(Math.random()*(a.length-1));if(i==a.length-1&&/[.?!]$/.test(a[i]))return null;a.splice(i,1)}
+return a.join(" ")};
+for(let k=0;k<30&&bad.size<3;k++){const b=mk1();if(b&&b!=it.en)bad.add(b)}if(bad.size<3)return null;
+return{type:"spot",p:it.ar,ask:"اختار الجملة الصح (الباقي فيه غلطة):",ans:it.en,opts:shuf([it.en,...bad]),lopt:true,it}}
+function qOrder(it){const t=it.en.split(/\s+/);if(t.length<4||t.length>10)return null;let sh=shuf(t.map((w,i)=>({w,i})));if(sh.every((x,i)=>x.i==i))sh=sh.reverse();
+return{type:"order",mode:"order",p:it.ar,ask:"رتّب الكلمات علشان تكوّن الجملة:",bank:sh,got:[],ans:it.en,it}}
+function qType(it,dict){return{type:dict?"dict":"type",mode:"type",p:dict?"🔊":it.ar,ask:dict?"اسمع واكتب الجملة بالإنجليزي:":(it.k=="s"?"اكتب الجملة بالإنجليزي:":"اكتب الكلمة بالإنجليزي:"),say:dict?it.en:null,auto:!!dict,ans:it.en,it,val:""}}
+function qClose(it){const pool=ALL.filter(x=>x.k===it.k&&x.en!==it.en&&x.l===it.l);const seen=new Set([it.ar]),o=[];shuf(pool).concat(shuf(ALL.filter(x=>x.k===it.k&&x.en!==it.en))).forEach(x=>{if(o.length<3&&!seen.has(x.ar)){seen.add(x.ar);o.push(x)}});return{type:"e2a",p:it.en,en:true,say:it.en,ask:"معنى الجملة/الكلمة؟",ans:it.ar,opts:shuf([it.ar,...o.map(x=>x.ar)]),it}}
+function mkHard(it){const r=Math.random();let q=null;
+if(it.k=="s"){q=r<.24?qOrder(it):r<.48?qType(it,true):r<.72?qCloze(it):r<.9?qSpot(it):null;if(!q)q=qType(it,false)}
+else{q=r<.45?qType(it,false):r<.75?qCloze(it):null;if(!q)q=r<.9?qClose(it):mkQ(it,"lis")}
+return q}
+function mkTest(list,n,withLet){return shuf(list).slice(0,n).map(mkHard)}
+function ordTap(a,k){const q=T.qs[T.i];if(q.d!=null)return;if(a==0){q.got.push(q.bank[k]);q.bank.splice(k,1)}else{q.bank.push(q.got[k]);q.got.splice(k,1)}render()}
+function ordCheck(){const q=T.qs[T.i];if(q.d!=null)return;q.ans0=q.got.map(x=>x.w).join(" ");freeDone(nrm(q.ans0)==nrm(q.ans))}
+function typCheck(){const q=T.qs[T.i];if(q.d!=null)return;const v=document.getElementById("tin").value;q.val=v;const a=nrm(q.ans),b=nrm(v);if(!b)return;freeDone(a==b||(a.length>14&&lev(a,b)<=1))}
+function freeDone(ok){const q=T.qs[T.i];q.d=ok?1:0;if(ok){T.ok++;S.xp+=3}else if(q.it){S.wrong[q.it.en]=(S.wrong[q.it.en]||0)+1}if(q.it)srUpdate(q.it.en,ok);save();render()}
+const _tv0=testV;
+testV=function(){const q=T.qs&&T.qs[T.i];if(!q)return _tv0();
+if(q.hint&&q.type=="cloze"&&!q.hd){/* hint shown via ask */}
+if(q.mode=="order"||q.mode=="type"){const head=`<div class="ph">${T.name} · ${T.i+1}/${T.qs.length}</div><div class="bar"><i style="width:${T.i/T.qs.length*100}%"></i></div><div class="card"><div class="ar">${q.ask}</div>`;
+const fb=q.d!=null?`<div class="note" style="background:${q.d?'#e7f6ec':'#fbe9e7'};color:#1d2433">${q.d?'✅ صح':'❌ غلط'}${q.d?'':`<div class="en" style="font-size:18px">${q.ans}</div>`}</div><button class="b w" onclick="T.i++;render()">التالي</button>`:"";
+if(q.mode=="order"){$("#app").innerHTML=head+`<div class="ar" style="font-size:22px;margin:8px 0">${q.p}</div></div><div class="card en" style="min-height:56px;font-size:20px;display:flex;flex-wrap:wrap;gap:6px">${q.got.map((x,k)=>`<button class="b s" style="margin:0;font-size:18px" onclick="ordTap(1,${k})">${x.w}</button>`).join("")}</div><div style="display:flex;flex-wrap:wrap;gap:6px;direction:ltr;margin:8px 0">${q.bank.map((x,k)=>`<button class="opt l" style="width:auto;margin:0;padding:8px 12px" onclick="ordTap(0,${k})">${x.w}</button>`).join("")}</div>${q.d==null?`<button class="b w" ${q.bank.length?'disabled':''} onclick="ordCheck()">تحقق</button>`:`<div class="en" style="font-size:16px">${q.ans0}</div>`}${fb}`;return}
+$("#app").innerHTML=head+`<div class="${q.say?'':'ar'}" style="font-size:24px;margin:8px 0">${q.p}</div>${q.say?`<button class="b s" onclick="say('${esc(q.say)}')">🔊 اسمع</button><button class="b s" onclick="say('${esc(q.say)}','en-US',.5)">🐢 ببطء</button>`:''}</div><input id="tin" class="opt l" dir="ltr" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" ${q.d!=null?'disabled':''} value="${(q.val||'').replace(/"/g,'&quot;')}" placeholder="اكتب هنا..." onkeydown="if(event.key=='Enter')typCheck()">${q.d==null?`<button class="b w" onclick="typCheck()">تحقق</button>`:''}${fb}`;
+if(q.auto&&!q.played){q.played=1;setTimeout(()=>say(q.say),300)}else if(q.d==null)setTimeout(()=>{const e=document.getElementById("tin");e&&e.focus()},50);return}
+_tv0();if(q.hint&&q.d==null){const c=document.querySelector("#app .card");if(c)c.insertAdjacentHTML("beforeend",`<div class="ph">${q.hint}</div>`)}};
 </script></body></html>
