@@ -1,7 +1,7 @@
-const C="eng2-v4";const F=["./","./index.html","./manifest.json"];
+const C="eng2-v5";const F=["./","./index.html","./manifest.json"];
 self.addEventListener("install",e=>{self.skipWaiting();e.waitUntil(caches.open(C).then(c=>c.addAll(F.map(u=>new Request(u,{cache:"reload"})))))});
 self.addEventListener("activate",e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x.startsWith("eng2-")&&x!==C).map(x=>caches.delete(x)))).then(()=>clients.claim())));
 // network first (always fresh when online), cache fallback (offline)
 self.addEventListener("fetch",e=>{if(e.request.method!=="GET")return;e.respondWith(fetch(e.request,{cache:"no-cache"}).then(n=>{if(n&&n.ok&&e.request.url.startsWith(self.location.origin)){const cp=n.clone();caches.open(C).then(c=>c.put(e.request,cp))}return n}).catch(()=>caches.open(C).then(c=>c.match(e.request,{ignoreSearch:true}).then(r=>r||c.match("./index.html")))))});
-self.addEventListener("periodicsync",e=>{if(e.tag==="daily")e.waitUntil((async()=>{const c=await caches.open("eng-cfg");const r=await c.match("cfg");if(!r)return;const g=await r.json();if(!g.on)return;const d=new Date(),hm=String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");if(hm>=g.time)await self.registration.showNotification("🔔 وقت إنجليزي",{body:g.text,tag:"daily"})})())});
+self.addEventListener("periodicsync",e=>{if(e.tag==="daily")e.waitUntil((async()=>{const c=await caches.open("eng-cfg");const r=await c.match("cfg");if(!r)return;const g=await r.json();if(!g.on)return;const d=new Date(),hm=String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");if(hm>=g.time)await self.registration.showNotification("🔔 وقت إنجليزي",{body:g.text,tag:"daily",renotify:true,requireInteraction:true,vibrate:[300,150,300,150,500]})})())});
 self.addEventListener("notificationclick",e=>{e.notification.close();e.waitUntil(clients.openWindow("./index.html"))});
