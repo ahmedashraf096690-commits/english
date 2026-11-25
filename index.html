@@ -4,7 +4,7 @@
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#1f6f5c">
 <title>إنجليزي من الصفر</title>
 <style>
-:root{--bg:#f6f1e7;--ink:#1d2433;--mut:#6b7385;--pri:#1f6f5c;--pri2:#e3f1ec;--bad:#c0392b;--ok:#1f8a4c;--line:#e6dfd0}
+:root{--card:#fff;--bg:#f6f1e7;--ink:#1d2433;--mut:#6b7385;--pri:#1f6f5c;--pri2:#e3f1ec;--bad:#c0392b;--ok:#1f8a4c;--line:#e6dfd0}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;line-height:1.6}
 header{padding:12px 16px;background:var(--pri);color:#fff;position:sticky;top:0;z-index:5}header h1{margin:0;font-size:18px}header small{opacity:.85}
 main{max-width:640px;margin:0 auto;padding:12px 14px 90px}
@@ -26,10 +26,18 @@ h2{font-size:17px;margin:16px 0 4px}.tag{font-size:12px;background:var(--pri2);c
 svg.mouth{width:100%;max-width:340px;display:block;margin:0 auto;background:#fdf8f0;border-radius:12px}
 .item{padding:8px 0;border-bottom:1px solid var(--line)}.item:last-child{border:0}
 input[type=time]{font-size:18px;padding:6px;border-radius:8px;border:1px solid var(--line)}
+body.dk{--bg:#2b3446;--card:#364158;--ink:#eef1f7;--mut:#b4bccd;--pri:#5fc3a5;--pri2:#3f4d68;--line:#4a5875;--bad:#ff8a7a;--ok:#6fd89a}
+body.dk nav,body.dk .card,body.dk .opt{background:var(--card);color:var(--ink)}body.dk header{background:#232b3b}body.dk .b{color:#14211c}body.dk .b.s{color:var(--pri)}body.dk .opt.ok{background:#2f5a47}body.dk .opt.no{background:#5d3b3f}body.dk .note{background:#4b4630;border-color:#6d6540;color:#f2ecd0}body.dk svg.mouth{background:#f3ecdf}
+.card,.opt{background:var(--card)}header{background:linear-gradient(135deg,#1f6f5c,#2a8f78);border-radius:0 0 22px 22px;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.hero{background:linear-gradient(135deg,#1f6f5c,#2f9c82);color:#fff;border-radius:20px;padding:16px;display:flex;justify-content:space-between;align-items:center;margin:8px 0}body.dk .hero{background:linear-gradient(135deg,#3b6f66,#4c8c7f)}
+.ring{width:64px;height:64px;border-radius:50%;border:5px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;font-weight:800}
+.card{box-shadow:0 1px 4px rgba(0,0,0,.05)}.les{cursor:pointer}nav button{padding:8px 0;font-size:11px}
+body.dk .item{border-color:var(--line)}
 </style></head><body>
 <header><h1>إنجليزي من الصفر إلى C1</h1><small id="sub"></small></header>
 <main id="app"></main><nav id="nav"></nav>
 <script>
+
 const LET=[
 ["A","إيه","أ مفتوحة مثل «أَ» في apple (مش آ)","apple","تفاحة","🍎"],["B","بي","ب عادية: شفتين مقفولين وصوت من الحلق","ball","كورة","⚽","B"],
 ["C","سي","ك قبل a/o/u (cat) وس قبل e/i (city)","cat","قطة","🐱"],["D","دي","د عادية","dog","كلب","🐶"],
@@ -97,6 +105,36 @@ V:["نفس وضع F: السنان العليا على الشفة التحتان�
 L:["طرف اللسان بيلمس اللثة فوق السنان العليا مباشرة، والصوت بيعدي من جنب اللسان.","طرف اللسان"],
 R:["اللسان بيتجمع ويرجع لورا، وطرفه مرفوع من غير ما يلمس سقف الحلق. ما بيرفش زي الراء العربي.","اللسان لا يلمس"],
 TH:["طرف اللسان بين السنان العليا والتحتانية، وانفخ هواء. think = ث من غير اهتزاز، this = ذ مع اهتزاز.","بين السنان"]};
+// compact lessons: title|emoji|note|words|sentences|dialogue(optional). items "en=ph=ar" joined by ;  dialogue "A:en=ar" joined by ;
+const mk=(r,cc)=>{const p=r.split("|"),it=x=>x.split(";").map(y=>y.split("="));
+return{t:p[0],e:p[1],n:p[2],w:it(p[3]),s:it(p[4]),d:p[5]?p[5].split(";").map(y=>{const a=y.split("=");return[a[0][0],a[0].slice(2),a[1]]}):null,cc:!!cc}};
+const CORE2=[
+"أرقام ١١-١٠٠|💯|13 thirteen و 30 thirty بيتشابهوا في النطق. thirTEEN التشديد على آخر الكلمة، THIRty التشديد على أولها.|eleven=إليفن=١١;twelve=تويلف=١٢;thirteen=ثيرتين=١٣;thirty=ثيرتي=٣٠;fifty=فيفتي=٥٠;hundred=هندرد=١٠٠|I am twenty years old.=آي آم تونتي يرز أولد=عمري عشرين سنة.;It costs fifty pounds.=إت كوستس فيفتي باوندز=بخمسين جنيه.;My number is zero one one.=ماي نمبر إز زيرو وان وان=رقمي صفر واحد واحد.",
+"أيام الأسبوع|📅|On + اليوم: on Monday. مع الوقت: at 5. مع الشهر: in May.|Monday=ماندي=الاثنين;Tuesday=تيوزداي=الثلاثاء;Friday=فرايداي=الجمعة;Sunday=صانداي=الأحد;week=ويك=أسبوع;today=تودي=النهارده|I work on Sunday.=آي ورك أون صانداي=أنا بشتغل يوم الأحد.;Today is Friday.=تودي إز فرايداي=النهارده الجمعة.;See you next week.=سي يو نكست ويك=أشوفك الأسبوع الجاي.",
+"الساعة والمواعيد|⏰|What time is it? = الساعة كام؟ It's + الساعة. at + الوقت: at nine o'clock.|hour=آور=ساعة;minute=مينت=دقيقة;o'clock=أوكلوك=تمام الساعة;half=هاف=نص;late=ليت=متأخر;early=إيرلي=بدري|What time is it?=وات تايم إز إت=الساعة كام؟;It is half past nine.=إت إز هاف باست ناين=الساعة تسعة ونص.;I am never late.=آي آم نيفر ليت=أنا عمري ما اتأخر.",
+"الدول والجنسيات|🌍|I am from Egypt = أنا من مصر. I am Egyptian = أنا مصري. اسم الجنسية بيبدأ بحرف كبير.|country=كانتري=دولة;Egyptian=إجيبشن=مصري;American=أمريكان=أمريكي;British=بريتش=بريطاني;language=لانجويج=لغة;Arabic=أرابيك=عربي|I am Egyptian.=آي آم إجيبشن=أنا مصري.;Where are you from?=وير آر يو فروم=إنت منين؟;I speak Arabic and English.=آي سبيك أرابيك أند إنجلش=بتكلم عربي وإنجليزي.",
+"الطقس|🌤️|It is + صفة: It is hot. للسؤال: What is the weather like?|weather=ويذر=طقس;hot=هوت=حر;cold=كولد=برد;rain=رين=مطر;sunny=صني=مشمس;cloudy=كلاودي=غايم|It is hot today.=إت إز هوت تودي=الجو حر النهارده.;It is raining.=إت إز رينينج=بتمطر.;What is the weather like?=وات إز ذا ويذر لايك=الجو عامل إزاي؟",
+"المواصلات|🚌|by + وسيلة: by bus, by taxi, by train (من غير the). on foot = ماشي.|bus=باس=أتوبيس;taxi=تاكسي=تاكسي;train=ترين=قطار;ticket=تيكت=تذكرة;station=ستيشن=محطة;stop=ستوب=موقف|I go to work by bus.=آي جو تو ورك باي باس=بروح الشغل بالأتوبيس.;Where is the train station?=وير إز ذا ترين ستيشن=فين محطة القطر؟;How much is the ticket?=هاو ماتش إز ذا تيكت=التذكرة بكام؟",
+"الأكل|🍽️|I like / I want / I would like (أنا حابب، مؤدبة). some = شوية للإيجاب، any للسؤال والنفي.|meat=ميت=لحمة;rice=رايس=رز;chicken=تشيكن=فراخ;egg=إج=بيضة;cheese=تشيز=جبنة;apple=آبل=تفاح|I would like some rice.=آي ود لايك سم رايس=عايز شوية رز لو سمحت.;Do you have any meat?=دو يو هاف إني ميت=عندك لحمة؟;I don't eat chicken.=آي دونت إيت تشيكن=أنا مبكلش فراخ.",
+"المطعم والمشروبات|☕|Can I have...? = ممكن آخد...؟ the bill / the check = الحساب.|order=أوردر=يطلب;ready=ريدي=جاهز;dish=ديش=طبق;menu=مينيو=قايمة;bill=بل=الحساب;spoon=سبون=معلقة|Can I have the menu, please?=كان آي هاف ذا مينيو بليز=ممكن القايمة لو سمحت؟;A coffee, please.=إيه كوفي بليز=قهوة لو سمحت.;Can I have the bill?=كان آي هاف ذا بل=ممكن الحساب؟",
+"الجسم والصحة|🩺|My head hurts = دماغي بتوجعني. I have a headache = عندي صداع. I feel + صفة.|head=هد=راس;hand=هاند=إيد;eye=آي=عين;stomach=ستوماك=معدة;doctor=دكتر=دكتور;medicine=ميدسن=دوا|My head hurts.=ماي هد هيرتس=راسي بتوجعني.;I need to see a doctor.=آي نيد تو سي إيه دكتر=محتاج أروح لدكتور.;Take this medicine twice a day.=تيك ذيس ميدسن تواي إيه داي=خد الدوا ده مرتين في اليوم.",
+"الملابس|👕|wear = يلبس. I am wearing = أنا لابس (دلوقتي).|shirt=شيرت=قميص;shoes=شوز=جزمة;jacket=جاكت=جاكت;hat=هات=قبعة;small=سمول=صغير;size=سايز=مقاس|I am wearing a jacket.=آي آم ويرنج إيه جاكت=أنا لابس جاكت.;Do you have a bigger size?=دو يو هاف إيه بيجر سايز=عندك مقاس أكبر؟;These shoes are too small.=ذيز شوز آر تو سمول=الجزمة دي صغيرة أوي.",
+"الروتين اليومي|🌅|مع he/she/it بنزود s للفعل: I wake up / he wakes up.|wake up=ويك آب=يصحى;eat=إيت=ياكل;go=جو=يروح;work=ورك=يشتغل;sleep=سليب=ينام;study=ستادي=يذاكر|I wake up at six.=آي ويك آب آت سكس=بصحى الساعة ستة.;He goes to work by bus.=هي جوز تو ورك باي باس=بيروح الشغل بالأتوبيس.;I study English every night.=آي ستادي إنجلش إيفري نايت=بذاكر إنجليزي كل ليلة.",
+"المضارع البسيط|🔁|I work / he works. للنفي: don't (I/you/we/they) و doesn't (he/she/it) + الفعل بدون s. للسؤال: Do you...? Does he...?|like=لايك=يحب;want=وانت=يريد;need=نيد=يحتاج;live=ليف=يسكن;speak=سبيك=يتكلم;know=نو=يعرف|She doesn't like coffee.=شي دازنت لايك كوفي=هي مبتحبش القهوة.;Do you speak English?=دو يو سبيك إنجلش=بتتكلم إنجليزي؟;He lives in Cairo.=هي ليفز إن كايرو=هو ساكن في القاهرة.",
+"يقدر ولا لا (can)|💪|can + فعل بدون to: I can swim. النفي can't، والسؤال Can you...؟|can=كان=يقدر;cannot=كانوت=مش يقدر;swim=سويم=يعوم;drive=درايف=يسوق;cook=كوك=يطبخ;write=رايت=يكتب|I can speak a little English.=آي كان سبيك إيه ليتل إنجلش=أعرف أتكلم شوية إنجليزي.;Can you help me?=كان يو هلب مي=تقدر تساعدني؟;I can't hear you.=آي كانت هير يو=مش سامعك.",
+"حروف الجر للمكان|📍|in = جوه، on = فوق (ملامس)، under = تحت، next to = جنب، between = بين.|in=إن=في;on=أون=على;under=أندر=تحت;next to=نكست تو=جنب;between=بيتوين=بين;behind=بيهايند=ورا|The keys are on the table.=ذا كيز آر أون ذا تيبل=المفاتيح على الترابيزة.;The bank is next to the school.=ذا بانك إز نكست تو ذا سكول=البنك جنب المدرسة.;My phone is under the book.=ماي فون إز أندر ذا بوك=تليفوني تحت الكتاب.",
+"أسئلة Wh|❓|what = إيه، where = فين، when = إمتى، who = مين، why = ليه، how = إزاي.|what=وات=إيه;when=وين=إمتى;who=هو=مين;why=واي=ليه;how=هاو=إزاي;which=ويتش=أنهي|What is your name?=وات إز يور نيم=اسمك إيه؟;When does the shop open?=وين داز ذا شوب أوبن=المحل بيفتح إمتى؟;Why are you late?=واي آر يو ليت=ليه إنت متأخر؟",
+"التسوق والأسعار|🛍️|How much is it? = بكام؟ It's + السعر. expensive = غالي، cheap = رخيص.|price=برايس=سعر;cheap=تشيب=رخيص;expensive=إكسبنسيف=غالي;pay=باي=يدفع;cash=كاش=كاش;card=كارد=كارت|How much is this?=هاو ماتش إز ذيس=ده بكام؟;It is too expensive.=إت إز تو إكسبنسيف=غالي أوي.;Can I pay by card?=كان آي باي باي كارد=ممكن أدفع بكارت؟"].map(r=>mk(r));
+const CC=[
+"الرد على المكالمة|📞|رد بجملة ثابتة: اسم الشركة + اسمك + How can I help you? نبرة صوت هادية وابتسامة (الابتسامة بتتسمع في الصوت).|thank you for calling=ثانك يو فور كولينج=شكرا لاتصالك;speaking=سبيكينج=معاك (على التليفون);how can I help=هاو كان آي هلب=أقدر أساعدك إزاي;assist=أسيست=يساعد;customer=كاستومر=عميل;service=سيرفس=خدمة|Thank you for calling Nile Telecom, my name is Ahmed.=ثانك يو فور كولينج نايل تيليكوم ماي نيم إز أحمد=شكرا لاتصالك بنايل تيليكوم، اسمي أحمد.;How can I help you today?=هاو كان آي هلب يو تودي=أقدر أساعدك إزاي النهارده؟;Good morning, this is Ahmed speaking.=جود مورنينج ذيس إز أحمد سبيكينج=صباح الخير، أحمد معاك.|A:Thank you for calling Nile Telecom, Ahmed speaking. How can I help you?=شكرا لاتصالك، أحمد معاك. أقدر أساعدك إزاي؟;C:Hi, I have a problem with my internet.=أهلا، عندي مشكلة في النت.;A:I am sorry to hear that. I will be happy to help.=آسف لسماع كده. يسعدني أساعدك.",
+"بيانات العميل|🪪|اطلب البيانات بأدب: May I have your name? بدل What is your name؟ وكرر البيان للتأكيد.|may I have=ماي آي هاف=ممكن آخد;full name=فول نيم=الاسم بالكامل;account number=أكاونت نمبر=رقم الحساب;spell=سبل=يتهجى;confirm=كونفيرم=يأكد;verify=فيريفاي=يتحقق|May I have your full name, please?=ماي آي هاف يور فول نيم بليز=ممكن اسمك بالكامل لو سمحت؟;Could you spell that for me?=كود يو سبل ذات فور مي=ممكن تتهجى لي ده؟;Let me confirm your account number.=ليت مي كونفيرم يور أكاونت نمبر=خليني أأكد رقم حسابك.|A:May I have your account number, please?=ممكن رقم حسابك لو سمحت؟;C:Yes, it is 4 8 2 9 1.=أيوه، هو ٤٨٢٩١.;A:Thank you. Let me verify that for you.=شكرا. خليني أتحقق لك.",
+"الهجاء والأرقام|🔤|في المكالمات بنهجي بكلمات: A for Alpha, B for Bravo, C for Charlie... علشان ما يحصلش لبس بين B و P و M و N.|Alpha=ألفا=A;Bravo=برافو=B;Charlie=تشارلي=C;Delta=دلتا=D;Mike=مايك=M;November=نوفمبر=N|A as in Alpha, B as in Bravo.=إيه آز إن ألفا بي آز إن برافو=A زي Alpha، B زي Bravo.;My email is ahmed at example dot com.=ماي إيميل إز أحمد آت إكزامبل دوت كوم=إيميلي ahmed@example.com.;The number is double five, three, two.=ذا نمبر إز دابل فايف ثري تو=الرقم خمسة خمسة تلاتة اتنين.",
+"الانتظار والتحويل|⏳|قبل أي انتظار استأذن العميل: Could you hold for a moment? وبعد الرجوع اشكره: Thank you for holding.|hold=هولد=ينتظر على الخط;moment=مومنت=لحظة;transfer=ترانسفر=يحول;department=ديبارتمنت=قسم;line=لاين=خط;back=باك=راجع|Could you please hold for a moment?=كود يو بليز هولد فور إيه مومنت=ممكن تنتظر لحظة من فضلك؟;Thank you for holding.=ثانك يو فور هولدينج=شكرا على انتظارك.;I will transfer you to the billing department.=آي ويل ترانسفر يو تو ذا بيلنج ديبارتمنت=هحولك لقسم الفواتير.",
+"فهم المشكلة|🛠️|اسأل أسئلة مفتوحة: What seems to be the problem? وبعدين لخص: So if I understand correctly...|problem=برابلم=مشكلة;issue=إشو=مشكلة / أمر;working=ورکينج=شغّال;error=إيرور=خطأ;since=سينس=من;happen=هابن=يحصل|What seems to be the problem?=وات سيمز تو بي ذا برابلم=إيه المشكلة بالظبط؟;When did this start?=وين ديد ذيس ستارت=ده بدأ إمتى؟;So if I understand correctly, the internet is not working.=سو إف آي أندرستاند كوريكتلي ذا إنترنت إز نوت ورکينج=يعني لو فهمت صح، النت مش شغال.|A:What seems to be the problem?=إيه المشكلة؟;C:My internet stopped working yesterday.=النت وقف إمبارح.;A:I understand. Let me check your line.=فاهم. خليني أشوف الخط بتاعك.",
+"الاعتذار والتعاطف|🙏|اعتذر وأظهر تعاطف من غير ما تتهم العميل: I'm sorry for the inconvenience. ممنوع تقول: You are wrong.|sorry=سوري=آسف;apologize=أبولوجايز=يعتذر;inconvenience=إنكونفينيانس=إزعاج;frustrating=فراستريتينج=محبط;understand=أندرستاند=يفهم;patience=بيشنس=صبر|I am sorry for the inconvenience.=آي آم سوري فور ذا إنكونفينيانس=آسف على الإزعاج.;I understand how frustrating this is.=آي أندرستاند هاو فراستريتينج ذيس إز=مقدر قد إيه ده محبط.;Thank you for your patience.=ثانك يو فور يور بيشنس=شكرا لصبرك.",
+"الحل والخطوات|✅|اشرح الخطوات بالترتيب: First, ... Then, ... Finally, ... واسأل: Does that make sense?|first=فرست=أولا;then=ذن=بعدين;finally=فاينلي=أخيرا;restart=ريستارت=يعيد التشغيل;click=كليك=يضغط;solve=سولف=يحل|First, please restart your router.=فرست بليز ريستارت يور راوتر=أولا من فضلك أعد تشغيل الراوتر.;Then wait for two minutes.=ذن ويت فور تو مينتس=بعدين استنى دقيقتين.;Does that make sense?=داز ذات ميك سينس=ده واضح؟|A:First, please restart your router.=أولا أعد تشغيل الراوتر.;C:Okay, I did it.=تمام، عملتها.;A:Great. Is it working now?=ممتاز. شغال دلوقتي؟",
+"إنهاء المكالمة|👋|قبل الإنهاء اسأل: Is there anything else I can help you with? وبعدين شكر وتحية.|anything else=إنيثينج إلس=أي حاجة تانية;resolved=ريزولفد=اتحلت;feedback=فيدباك=رأي;survey=سيرفاي=استبيان;day=داي=يوم;call back=كول باك=يتصل تاني|Is there anything else I can help you with?=إز ذير إنيثينج إلس آي كان هلب يو ويذ=في أي حاجة تانية أقدر أساعدك فيها؟;Your issue has been resolved.=يور إشو هاز بين ريزولفد=مشكلتك اتحلت.;Thank you for calling. Have a great day!=ثانك يو فور كولينج هاف إيه جريت داي=شكرا لاتصالك. يوم سعيد!|A:Is there anything else I can help you with?=في حاجة تانية؟;C:No, that's all. Thank you.=لا، كده تمام. شكرا.;A:My pleasure. Have a great day!=على الرحب. يوم سعيد!"].map(r=>mk(r,1));
+LESSONS.push(...CORE2,...CC);
 let S={};try{S=JSON.parse(localStorage.getItem("eng2")||"{}")}catch(e){}
 S.done=S.done||{};S.unit=S.unit||{};S.wrong=S.wrong||{};S.days=S.days||{};S.rem=S.rem||{on:false,time:"20:00"};S.revs=S.revs||0;
 const save=()=>{try{localStorage.setItem("eng2",JSON.stringify(S))}catch(e){}};
@@ -111,9 +149,8 @@ const sayAr=t=>say(t,"ar-EG",.95);
 // ---- data helpers ----
 const items=l=>[...LESSONS[l].w.map(x=>({en:x[0],ph:x[1],ar:x[2],k:"w",l})),...LESSONS[l].s.map(x=>({en:x[0],ph:x[1],ar:x[2],k:"s",l}))];
 const ALL=LESSONS.flatMap((_,i)=>items(i));
-const UNITS=[[0,6],[7,13]];const unitOf=l=>l<7?0:1;
+const UNITS=[[0,6],[7,13],[14,20],[21,29],[30,37]];const unitReady=u=>{for(let i=UNITS[u][0];i<=UNITS[u][1];i++)if(!(S.done[i]>=70))return false;return true};
 const doneCount=()=>Object.keys(S.done).length;
-const unitReady=u=>{for(let i=UNITS[u][0];i<=UNITS[u][1];i++)if(!(S.done[i]>=70))return false;return true};
 // ---- questions ----
 function mkQ(it,type){const pool=ALL.filter(x=>x.k===it.k&&x.en!==it.en);
 if(type==="let"){const lt=LESSONS[it.l].L[0];const L=LET.concat(DIG);return{type,p:`${lt[5]} ${lt[3]}`,en:true,say:lt[3],ans:lt[0],opts:shuf([lt[0],...shuf(LET.filter(x=>x[0]!==lt[0])).slice(0,3).map(x=>x[0])]),ask:"الكلمة دي بتبدأ بأنهي حرف؟",it:{en:lt[3],wr:lt[0]}}}
@@ -124,7 +161,7 @@ return{type:"lis",p:"🔊",ask:"اسمع واختار المعنى",say:it.en,au
 function mkTest(list,n,withLet){const qs=shuf(list).slice(0,n).map((it,i)=>mkQ(it,["e2a","a2e","lis"][i%3]));
 if(withLet)qs.splice(Math.min(2,qs.length),0,mkQ(list[0],"let"),mkQ(list[0],"let"));return qs}
 // ---- UI state ----
-let tab="home",view=null,T=null,tab0=[["home","🏠","الرئيسية"],["course","📚","الدروس"],["review","🔁","مراجعة"],["mouth","👄","نطق"],["me","⚙️","أنا"]];
+let tab="home",view=null,T=null,tab0=[["home","🏠","الرئيسية"],["course","📚","الدروس"],["call","🎧","كول سنتر"],["review","🔁","مراجعة"],["mouth","🗣️","نطق"],["me","⚙️","أنا"]];
 function nav(){$("#nav").innerHTML=tab0.map(t=>`<button class="${t[0]==tab?'on':''}" onclick="go('${t[0]}')"><b>${t[1]}</b>${t[2]}</button>`).join("")}
 function go(t){tab=t;view=null;T=null;render()}
 function render(){nav();$("#sub").textContent=`${doneCount()} من ${LESSONS.length} درس مكتمل`;
@@ -198,6 +235,106 @@ $("#app").innerHTML=`<div class="card"><b>🔔 تذكير يومي</b><div class
 <div class="card"><b>🧾 إحصائيات</b><div class="ar">دروس مكتملة: ${doneCount()} / ${LESSONS.length}<br>أيام تدريب: ${Object.keys(S.days).length}<br>مرات المراجعة: ${S.revs}</div></div>
 <div class="card"><button class="b r w" style="background:#c0392b" onclick="if(confirm('مسح كل التقدم؟')){localStorage.removeItem('eng2');location.reload()}">مسح التقدم</button></div>`}
 if("serviceWorker" in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("sw.js").then(pushCfg);
+// ===== v3 overrides =====
+S.sr=S.sr||{};S.xp=S.xp||0;S.theme=S.theme||"light";S.type=S.type||{};S.cdone=S.cdone||{};
+const isCC=i=>!!LESSONS[i].cc;const CORE_N=30;
+function applyTheme(){document.body.classList.toggle("dk",S.theme==="soft");const m=document.querySelector('meta[name=theme-color]');if(m)m.content=S.theme==="soft"?"#2b3446":"#1f6f5c"}
+// audio: recorded clip if present, else device voice
+const clipKey=t=>t.toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"").slice(0,60);
+let curA=null;
+function say(t,lang,rate){try{if(curA){curA.pause();curA=null}}catch(e){}
+if(window.AUDIO&&(!lang||lang.startsWith("en"))&&(!rate||rate>=.8)&&AUDIO[clipKey(t)]){curA=new Audio(AUDIO[clipKey(t)]);curA.play().catch(()=>0);return}
+if(!window.speechSynthesis)return alert("جهازك لا يدعم الصوت");speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=lang||"en-US";
+const v=V.find(v=>v.lang.replace("_","-")===u.lang)||V.find(v=>v.lang.toLowerCase().startsWith(u.lang.slice(0,2)));if(v)u.voice=v;u.rate=rate||(lang&&lang.startsWith("ar")?1:.9);speechSynthesis.speak(u)}
+// ---- SM-2 spaced repetition ----
+const DAY=864e5;
+function srUpdate(en,good){const r=S.sr[en]||{ef:2.5,iv:0,n:0,due:0};
+if(good){r.n++;r.iv=r.n==1?1:r.n==2?3:Math.round(r.iv*r.ef);r.ef=Math.min(2.8,r.ef+.05)}else{r.n=0;r.iv=0;r.ef=Math.max(1.3,r.ef-.2)}
+r.due=Date.now()+(good?r.iv*DAY:10*60*1000);S.sr[en]=r}
+const dueItems=()=>{const m={};ALL.forEach(x=>m[x.en]=x);return Object.entries(S.sr).filter(e=>e[1].due<=Date.now()&&m[e[0]]).sort((a,b)=>a[1].due-b[1].due).map(e=>m[e[0]])};
+const lvl=()=>Math.floor(Math.sqrt(S.xp/50))+1;
+// ---- questions (guard for lessons without letters) ----
+function mkTest(list,n,withLet){const qs=shuf(list).slice(0,n).map((it,i)=>mkQ(it,["e2a","a2e","lis"][i%3]));
+if(withLet&&LESSONS[list[0].l].L){qs.splice(Math.min(2,qs.length),0,mkQ(list[0],"let"),mkQ(list[0],"let"))}return qs}
+// ---- render ----
+function render(){applyTheme();nav();$("#sub").textContent=`المستوى ${lvl()} · ${S.xp} XP · ${streak()}🔥`;
+if(T)return testV();if(view&&view.lesson!=null)return lessonV();if(view&&view.typing)return typingV();
+({home,course,call,review,mouth,me})[tab]();scrollTo(0,0)}
+function nextTask(){for(let i=0;i<CORE_N;i++)if(!(S.done[i]>=70))return i;return -1}
+function lessonRow(i){const d=S.done[i];return `<div class="card les ${d>=70?'done':''}" onclick="openLesson(${i})"><div class="n">${d>=70?'✓':(isCC(i)?i-CORE_N+1:i+1)}</div><div style="flex:1"><b>${LESSONS[i].e} ${LESSONS[i].t}</b><div class="ph">${LESSONS[i].w.length} كلمات · ${LESSONS[i].s.length} جمل${LESSONS[i].d?' · حوار':''}${d!=null?' · آخر نتيجة '+d+'%':''}</div></div></div>`}
+function home(){const n=nextTask(),dc=Object.keys(S.done).filter(k=>k<CORE_N&&S.done[k]>=70).length,pct=Math.round(dc/CORE_N*100);const doneToday=!!S.days[today()];const due=dueItems().length;
+const cn=[...Array(8).keys()].map(k=>k+CORE_N).find(i=>!(S.done[i]>=70));
+$("#app").innerHTML=`<div class="hero"><div><b style="font-size:20px">أهلا يا أحمد 👋</b><div>${streak()} يوم متتالي 🔥 · المستوى ${lvl()}</div></div><div class="ring">${pct}%</div></div>
+<div class="bar"><i style="width:${pct}%"></i></div><div class="ph" style="margin-top:4px">مستوى A1: ${dc} من ${CORE_N} درس</div>
+${S.pl==null?`<div class="card"><b>🎯 اختبار تحديد المستوى</b><div class="ar">١٢ سؤال بيحدد تبدأ منين. لو إنت مبتدئ تماما تجاهله وابدأ من الدرس ١.</div><button class="b w" onclick="startPlacement()">ابدأ الاختبار</button></div>`:''}
+<div class="card"><span class="tag">مهمة النهارده ${doneToday?'✅ اتعملت':''}</span>${n>=0?`<div class="ar" style="margin:6px 0">الدرس ${n+1}: ${LESSONS[n].e} ${LESSONS[n].t}</div><button class="b w" onclick="openLesson(${n})">ابدأ الدرس</button>`:`<div class="ar">خلصت كل دروس A1 🎉 جرب امتحان المستوى من تبويب الدروس.</div>`}
+${cn!=null?`<button class="b s w" onclick="openLesson(${cn})">🎧 درس الكول سنتر: ${LESSONS[cn].t}</button>`:''}
+<button class="b s w" onclick="go('review')">🔁 مراجعة ذكية${due?` (${due} كلمة مستحقة)`:''}</button></div>
+<h2>خريطة الطريق</h2>`+[["A1","مبتدئ: ٣٠ درس + ٨ دروس كول سنتر","on"],["A2","روتين، ماضي بسيط، اتجاهات، كول سنتر ٢",""],["B1","تجارب، مستقبل، شكاوى، كول سنتر ٣",""],["B2","نقاش، مكالمات صعبة، كتابة إيميلات",""],["C1","طلاقة، أسلوب، مقابلة عمل",""]].map(r=>`<div class="card les ${r[2]?'':'lock'}"><div class="n" style="border-radius:10px;width:46px">${r[0]}</div><div>${r[1]}${r[2]?'':'<br><small class="ph">قريبا</small>'}</div></div>`).join("")}
+function course(){let h="";for(let u=0;u<4;u++){h+=`<h2>الوحدة ${u+1}</h2>`;for(let i=UNITS[u][0];i<=UNITS[u][1];i++)h+=lessonRow(i);
+const r=unitReady(u),ut=S.unit[u];h+=`<div class="card les ${r?'':'lock'}"><div class="n">🏁</div><div style="flex:1"><b>اختبار الوحدة ${u+1}</b><div class="ph">${r?'جاهز'+(ut!=null?' · آخر نتيجة '+ut+'%':''):'يفتح بعد إنهاء دروس الوحدة'}</div></div><button class="b" ${r?'':'disabled'} onclick="startUnit(${u})">ابدأ</button></div>`}
+const all=[0,1,2,3].every(unitReady);h+=`<h2>امتحان المستوى</h2><div class="card les ${all?'':'lock'}"><div class="n">A1</div><div style="flex:1"><b>امتحان A1 النهائي</b><div class="ph">${all?'٢٥ سؤال · النجاح ٨٠%'+(S.exam&&S.exam.A1!=null?' · آخر نتيجة '+S.exam.A1+'%':''):'يفتح بعد اختبارات الوحدات الأربعة'}</div></div><button class="b" ${all?'':'disabled'} onclick="startExam()">ابدأ</button></div>`;
+$("#app").innerHTML=h}
+function startExam(){const l=[];for(let i=0;i<CORE_N;i++)l.push(...items(i));T={name:"امتحان A1",qs:mkTest(l,25,false),i:0,ok:0,pass:80,after:p=>{S.exam=S.exam||{};S.exam.A1=Math.max(S.exam.A1||0,p)},back:"course"};render()}
+function startUnit(u){const l=[];for(let i=UNITS[u][0];i<=UNITS[u][1];i++)l.push(...items(i));T={name:`اختبار الوحدة ${u+1}`,qs:mkTest(l,15,false),i:0,ok:0,pass:75,after:p=>{S.unit[u]=Math.max(S.unit[u]||0,p)},back:u==4?"call":"course"};render()}
+// ---- call-center tab ----
+function call(){let h=`<div class="hero"><div><b style="font-size:19px">🎧 إنجليزي الكول سنتر</b><div>جمل ومكالمات حقيقية، من أول يوم</div></div></div>`;
+for(let i=CORE_N;i<LESSONS.length;i++)h+=lessonRow(i);
+h+=`<h2>تدريبات</h2><div class="card"><b>⌨️ تدريب الكتابة السريعة</b><div class="ar">الشركات بتطلب غالبا سرعة كتابة حوالي ٣٥ كلمة في الدقيقة (رقم تقريبي من مصادر خارجية). اكتب جمل المكالمات بسرعة ودقة.</div><button class="b w" onclick="startTyping()">ابدأ الكتابة</button>${S.type.best?`<div class="ph">أفضل سرعة: ${S.type.best} كلمة/دقيقة</div>`:''}</div>
+<div class="card"><b>🎙️ تمثيل مكالمة (Role-play)</b><div class="ar">افتح أي درس كول سنتر ثم تبويب «حوار»: اخفِ كلام الموظف وقله بصوتك قبل ما تسمعه.</div></div>
+<div class="note">الأرقام والتفاصيل عن مراحل التوظيف في مصر (اختبار صوتي، مقابلة، اختبار لغة، كتابة) من مصادر خارجية غير رسمية، فاعتبرها إرشاد عام.</div>`;
+$("#app").innerHTML=h}
+// ---- typing drill ----
+function startTyping(){const pool=LESSONS.slice(CORE_N).flatMap(l=>l.s.map(x=>x[0]));view={typing:1,txt:shuf(pool).slice(0,3).join(" "),t0:0,done:0};render()}
+function typingV(){const v=view;$("#app").innerHTML=`<div class="row"><b>⌨️ كتابة سريعة</b><button class="b s" onclick="view=null;render()">رجوع</button></div><div class="card"><div class="en" style="font-size:19px;font-weight:600" id="tg"></div></div><textarea id="ti" dir="ltr" rows="4" style="width:100%;font-size:18px;border-radius:12px;padding:10px;border:2px solid var(--line);background:var(--card);color:var(--ink)" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="ابدأ الكتابة هنا..."></textarea><div id="tr"></div>`;
+$("#ti").oninput=function(){if(!v.t0)v.t0=Date.now();const t=this.value,g=v.txt;let ok=0;for(let i=0;i<t.length;i++)if(t[i]===g[i])ok++;
+$("#tg").innerHTML=[...g].map((c,i)=>i<t.length?`<span style="color:${t[i]===c?'var(--ok)':'var(--bad)'}">${c}</span>`:c).join("");
+if(t.length>=g.length){const m=(Date.now()-v.t0)/60000,w=Math.round(g.split(" ").length/m),acc=Math.round(ok/g.length*100);S.xp+=10;if(w>(S.type.best||0)&&acc>=90)S.type.best=w;S.days[today()]=(S.days[today()]||0)+1;save();this.disabled=true;
+$("#tr").innerHTML=`<div class="card" style="text-align:center"><div style="font-size:40px">⌨️</div><b>${w} كلمة/دقيقة · دقة ${acc}%</b><div class="ph">الدقة أهم من السرعة: ابدأ بدقة ٩٥%+ وبعدين زود السرعة.</div></div><button class="b w" onclick="startTyping()">جملة جديدة</button>`}};$("#tg").textContent=v.txt;$("#ti").focus()}
+// ---- lesson (dynamic steps, dialogue) ----
+function lessonV(){const i=view.lesson,L=LESSONS[i];const st=[];if(L.L)st.push(["حروف",0]);st.push(["كلمات",1],["جمل",2]);if(L.d)st.push(["حوار",4]);st.push(["قاعدة",3]);
+if(view.step==null||!st.some(x=>x[1]==view.step))view.step=st[0][1];let b="";
+const tabs=`<div class="row" style="margin:6px 0">${st.map(s=>`<button class="b ${s[1]==view.step?'':'s'}" style="flex:1;margin:0 2px;padding:8px 2px;font-size:14px" onclick="view.step=${s[1]};render()">${s[0]}</button>`).join("")}</div>`;
+const btn=t=>`<button class="b s" onclick="say('${esc(t)}')">🔊</button><button class="b s" onclick="say('${esc(t)}','en-US',.5)">🐢</button>`;
+if(view.step==0){b=`<div class="note">حروف وأصوات الدرس. اسمع كل مثال وكرره بصوت عالي.</div>`+L.L.map(l=>`<div class="card"><div class="row"><div class="big">${l[0]}</div><div style="flex:1"><div class="ar"><b>${l[1]}</b></div><div class="ph">${l[2]}</div><div class="en" style="font-size:20px">${l[5]} ${l[3]} <span class="ph" style="font-size:14px">(${l[4]})</span></div></div></div><button class="b s" onclick="say('${l[3]}')">🔊 ${l[3]}</button><button class="b s" onclick="say('${l[3]}','en-US',.5)">🐢</button>${l[6]?`<button class="b s" onclick="mouthOpen('${l[6]}')">👄 شوف وضع الفم</button>`:''}</div>`).join("")}
+else if(view.step==1)b=L.w.map(w=>`<div class="card"><div class="row"><div><div class="en">${w[0]}</div><div class="ph">النطق: ${w[1]}</div><div class="ar">${w[2]}</div></div><div>${btn(w[0])}</div></div></div>`).join("");
+else if(view.step==2)b=L.s.map(w=>`<div class="card"><div class="en" style="font-size:20px">${w[0]}</div><div class="ph">النطق: ${w[1]}</div><div class="ar">${w[2]}</div>${btn(w[0])}<button class="b s" onclick="shadow('${esc(w[0])}')">🎙️ سجّل صوتك</button><div id="sh"></div></div>`).join("");
+else if(view.step==4){const hide=view.hide;b=`<div class="note">اضغط «اخفِ كلام الموظف»، قل جملة الموظف بصوتك، وبعدين اسمعها وقارن. A = الموظف (إنت)، C = العميل.</div><button class="b s w" onclick="view.hide=!view.hide;render()">${hide?'أظهر كلام الموظف':'اخفِ كلام الموظف'}</button>`+L.d.map(x=>`<div class="card" style="${x[0]=='A'?'border-right:5px solid var(--pri)':''}"><b>${x[0]=='A'?'🧑‍💼 الموظف':'🙋 العميل'}</b>${x[0]=='A'&&hide?'<div class="ph">النص مخفي... قلها بصوتك</div>':`<div class="en" style="font-size:18px">${x[1]}</div><div class="ar">${x[2]}</div>`}${btn(x[1])}</div>`).join("")}
+else b=`<div class="card"><b>📘 شرح القاعدة</b><div class="ar" style="margin:8px 0">${L.n}</div><button class="b s" onclick="sayAr('${esc(L.n)}')">🔊 اسمع الشرح بالعربي</button><div class="ph">الصوت العربي بيعتمد على الأصوات المنزّلة في تليفونك.</div></div>`;
+$("#app").innerHTML=`<div class="row"><b>${isCC(i)?'🎧 كول سنتر':'الدرس '+(i+1)}: ${L.e} ${L.t}</b><button class="b s" onclick="view=null;render()">رجوع</button></div>${tabs}${b}<button class="b w" onclick="startLesson(${i})">✍️ ابدأ اختبار الدرس</button>`;scrollTo(0,0)}
+function startLesson(i){T={name:`اختبار: ${LESSONS[i].t}`,qs:mkTest(items(i),8,true),i:0,ok:0,pass:70,after:p=>{S.done[i]=Math.max(S.done[i]||0,p);if(p>=70)S.xp+=20},back:"lesson",les:i};render()}
+// ---- shadowing recorder (no scoring: play model then your own voice) ----
+let rec=null;
+async function shadow(t){const el=document.getElementById("sh");
+if(rec&&rec.state==="recording"){rec.stop();return}
+try{const st=await navigator.mediaDevices.getUserMedia({audio:true});const ch=[];rec=new MediaRecorder(st);rec.ondataavailable=e=>ch.push(e.data);
+rec.onstop=()=>{st.getTracks().forEach(x=>x.stop());const u=URL.createObjectURL(new Blob(ch,{type:rec.mimeType}));if(el)el.innerHTML=`<div class="ph">سمّع الاتنين وقارن بنفسك:</div><button class="b s" onclick="say('${esc(t)}')">🔊 النموذج</button><audio controls src="${u}" style="width:100%"></audio>`};
+rec.start();if(el)el.innerHTML=`<button class="b" style="background:#c0392b" onclick="rec.stop()">⏹️ إيقاف التسجيل</button> <span class="ph">بيسجل... قل الجملة</span>`;say(t)}catch(e){alert("محتاج تسمح بالميكروفون")}}
+// ---- review (SM-2) ----
+function startReview(){let l=dueItems().slice(0,10);if(l.length<5){const d=Object.keys(S.done).filter(k=>S.done[k]>=70).map(Number);l=l.concat(shuf(d.flatMap(items)).slice(0,10-l.length))}
+if(!l.length)return;T={name:"مراجعة ذكية",qs:mkTest(l,10,false),i:0,ok:0,pass:70,after:p=>{S.revs++;S.rv=today();S.xp+=10},back:"review"};tab="review";render()}
+function review(){const d=Object.keys(S.done).filter(k=>S.done[k]>=70).length,due=dueItems().length;const wr=Object.entries(S.wrong).sort((a,b)=>b[1]-a[1]).slice(0,8);
+$("#app").innerHTML=`<div class="card"><b>🔁 مراجعة ذكية (تكرار متباعد)</b><div class="ar">الكلمة اللي تجاوبها صح بترجع بعد ١ ثم ٣ أيام ثم أكتر. اللي بتغلط فيها بترجع بسرعة. ده أسرع طريق للحفظ طويل المدى.</div>${d?`<div class="tag">مستحق دلوقتي: ${due}</div><button class="b w" onclick="startReview()">ابدأ المراجعة</button>`:'<div class="note">خلص درس واحد على الأقل الأول.</div>'}</div>
+${wr.length?`<h2>كلمات محتاجة تركيز</h2><div class="card">${wr.map(w=>`<div class="item row"><span class="en" style="font-size:18px">${w[0]}</span><span class="tag">غلطات: ${w[1]}</span></div>`).join("")}</div>`:''}`}
+function pick(k){const q=T.qs[T.i];q.d=k;const ok=q.opts[k]===q.ans;if(ok){T.ok++;S.xp+=2}else if(q.it){S.wrong[q.it.en]=(S.wrong[q.it.en]||0)+1}if(q.it&&q.type!="let")srUpdate(q.it.en,ok);save();render()}
+// ---- placement ----
+function startPlacement(){const l=[0,4,8,12,16,20,24,28].flatMap(i=>items(i).filter(x=>x.k=="w").slice(0,2)).concat([2,6,10,14].map(i=>items(i)[7]));T={name:"تحديد المستوى",qs:mkTest(l,12,false),i:0,ok:0,pass:0,after:p=>{const s=Math.round(p*12/100);const st=s>=11?15:s>=8?8:s>=5?4:0;S.pl=st;if(st){S.plmsg=st}},back:"home",place:1};render()}
+// ---- test result (adds placement + XP) ----
+function testV(){const q=T.qs[T.i];if(!q){const p=Math.round(T.ok/T.qs.length*100),pass=p>=T.pass;T.after(p);S.days[today()]=(S.days[today()]||0)+1;save();
+if(T.place){const st=S.pl;$("#app").innerHTML=`<div class="card" style="text-align:center"><div style="font-size:48px">🎯</div><b>نتيجتك: ${p}%</b><div class="ar">${st?`ننصحك تبدأ من الدرس ${st+1}. الدروس قبله ممكن ترجعلها وقت ما تحب.`:'ابدأ من الدرس ١ علشان تبني الأساس صح.'}</div></div>${st?`<button class="b w" onclick="for(let i=0;i<${st};i++)if(!(S.done[i]>=70))S.done[i]=71;save();T=null;go('home')">تمام، ابدأ من الدرس ${st+1} (يتم احتساب الدروس السابقة)</button>`:''}<button class="b s w" onclick="T=null;go('home')">ابدأ من الأول</button>`;return}
+$("#app").innerHTML=`<div class="card" style="text-align:center"><div style="font-size:48px">${pass?'🎉':'💪'}</div><b>${T.name}: ${p}%</b><div class="ar">${pass?'نجحت! ✅':`محتاج ${T.pass}% عشان تعدي. راجع وحاول تاني.`}</div></div><button class="b w" onclick="${T.back=='lesson'?`T=null;view={lesson:${T.les}};render()`:`go('${T.back}')`}">${T.back=='lesson'?'رجوع للدرس':'تمام'}</button>${pass&&T.back=='lesson'?`<button class="b s w" onclick="go('home')">الرئيسية</button>`:''}`;return}
+$("#app").innerHTML=`<div class="ph">${T.name} · ${T.i+1}/${T.qs.length}</div><div class="bar"><i style="width:${T.i/T.qs.length*100}%"></i></div><div class="card"><div class="ar">${q.ask}</div><div class="${q.en?'en':'ar'}" style="margin:8px 0;${q.en?'':'font-size:24px'}">${q.p}</div>${q.say?`<button class="b s" onclick="say('${esc(q.say)}')">🔊</button>`:''}</div>${q.opts.map((o,k)=>`<button class="opt ${q.lopt||q.type=='let'?'l':''} ${q.d!=null?(o===q.ans?'ok':q.d===k?'no':''):''}" ${q.d!=null?'disabled':''} onclick="pick(${k})">${o}</button>`).join("")}${q.d!=null?`<button class="b w" onclick="T.i++;render()">التالي</button>`:''}`;
+if(q.auto&&!q.played){q.played=1;setTimeout(()=>say(q.say),300)}}
+// ---- pronunciation tab: mouths + minimal pairs ----
+const PAIRS=[["ship","sheep"],["bit","beat"],["pen","ben"],["pan","ban"],["very","berry"],["fine","vine"],["light","right"],["think","sink"],["full","fool"],["cat","cut"]];
+function mouth(){$("#app").innerHTML=`<div class="note">رسومات توضح وضع اللسان والشفايف. الدايرة الحمرا مكان الحركة. اسمع المثال بعد ما تشوف الرسمة.</div><div class="card"><b>👂 أزواج صوتية (Minimal pairs)</b><div class="ph">كلمات صوتها قريب. افرق بينهم بالسمع والنطق.</div>${PAIRS.map(p=>`<div class="item row"><span class="en" style="font-size:18px">${p[0]} / ${p[1]}</span><span><button class="b s" onclick="say('${p[0]}','en-US',.7)">🔊 ${p[0]}</button><button class="b s" onclick="say('${p[1]}','en-US',.7)">🔊 ${p[1]}</button></span></div>`).join("")}</div>`+MORD.map(k=>mouthCard(k)).join("")}
+// ---- settings ----
+function me(){const installed=matchMedia("(display-mode: standalone)").matches;const perm=window.Notification?Notification.permission:"غير مدعوم";const dc=Object.keys(S.done).filter(k=>S.done[k]>=70).length;
+$("#app").innerHTML=`<div class="card"><b>🎨 المظهر</b><div class="row" style="margin-top:6px"><button class="b ${S.theme=='light'?'':'s'}" style="flex:1" onclick="S.theme='light';save();render()">☀️ فاتح</button><button class="b ${S.theme=='soft'?'':'s'}" style="flex:1" onclick="S.theme='soft';save();render()">🌙 داكن هادي</button></div></div>
+<div class="card"><b>🔔 تذكير يومي</b><div class="ar">وقت التذكير: <input type="time" value="${S.rem.time}" onchange="S.rem.time=this.value;save();pushCfg()"></div>
+<button class="b w" onclick="setRem(${!S.rem.on})">${S.rem.on?'إيقاف التذكير':'تشغيل التذكير'}</button><button class="b s w" onclick="notify('تجربة: '+taskText())">جرب إشعار الآن</button>
+<div class="note">حالة الإذن: ${perm}. ${installed?'التطبيق مثبت ✅':'التطبيق غير مثبت: التذكير بيشتغل بس وهو مفتوح.'} لو الأندرويد وقف التطبيق في الخلفية ممكن التذكير يتأخر، شغّل "بدون قيود للبطارية" للتطبيق.</div></div>
+<div class="card"><b>🧾 إحصائيات</b><div class="ar">XP: ${S.xp} · المستوى ${lvl()}<br>دروس مكتملة: ${dc} / ${LESSONS.length}<br>أيام تدريب: ${Object.keys(S.days).length}<br>مرات المراجعة: ${S.revs}<br>كلمات في المراجعة الذكية: ${Object.keys(S.sr).length}</div></div>
+<div class="card"><button class="b r w" style="background:#c0392b" onclick="if(confirm('مسح كل التقدم؟')){localStorage.removeItem('eng2');location.reload()}">مسح التقدم</button></div>`}
 render();
-
 </script></body></html>
