@@ -1,7 +1,0 @@
-{
-  "appId": "com.ahmed.english",
-  "appName": "إنجليزي",
-  "webDir": "www",
-  "android": { "allowMixedContent": false },
-  "plugins": { "LocalNotifications": { "smallIcon": "ic_stat_icon", "iconColor": "#1F6F5C", "sound": "chime.wav" } }
-}
