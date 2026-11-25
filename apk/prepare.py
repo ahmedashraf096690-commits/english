@@ -66,7 +66,7 @@ open("android/app/src/main/res/drawable/ic_stat_icon.xml", "w").write('<vector x
 # 3) manifest permissions
 mp = "android/app/src/main/AndroidManifest.xml"
 s = open(mp, encoding="utf8").read()
-perms = ["POST_NOTIFICATIONS", "SCHEDULE_EXACT_ALARM", "USE_EXACT_ALARM", "VIBRATE", "RECEIVE_BOOT_COMPLETED", "WAKE_LOCK"]
+perms = ["POST_NOTIFICATIONS", "SCHEDULE_EXACT_ALARM", "USE_EXACT_ALARM", "VIBRATE", "RECEIVE_BOOT_COMPLETED", "WAKE_LOCK", "RECORD_AUDIO", "MODIFY_AUDIO_SETTINGS"]
 add = "".join('    <uses-permission android:name="android.permission.%s" />\n' % p for p in perms if p not in s)
 s = s.replace("</manifest>", add + "</manifest>")
 open(mp, "w", encoding="utf8").write(s)
