@@ -36,7 +36,7 @@ body.dk .item{border-color:var(--line)}
 </style></head><body>
 <header><h1>إنجليزي من الصفر إلى C1</h1><small id="sub"></small></header>
 <main id="app"></main><nav id="nav"></nav>
-<script>
+<script src="gx.js"></script><script>
 
 const LET=[
 ["A","إيه","أ مفتوحة مثل «أَ» في apple (مش آ)","apple","تفاحة","🍎"],["B","بي","ب عادية: شفتين مقفولين وصوت من الحلق","ball","كورة","⚽","B"],
@@ -495,7 +495,7 @@ if(view.step==0){b=`<div class="note">حروف وأصوات الدرس. اسمع
 else if(view.step==1)b=L.w.map(w=>`<div class="card"><div class="row"><div><div class="en">${w[0]}</div><div class="ph">النطق: ${w[1]}</div><div class="ar">${w[2]}</div></div><div>${btn(w[0])}</div></div></div>`).join("");
 else if(view.step==2)b=L.s.map(w=>`<div class="card"><div class="en" style="font-size:20px">${w[0]}</div><div class="ph">النطق: ${w[1]}</div><div class="ar">${w[2]}</div>${btn(w[0])}<button class="b s" onclick="shadow('${esc(w[0])}',this)">🎙️ سجّل صوتك</button><div id="sh"></div></div>`).join("");
 else if(view.step==4){const hide=view.hide;b=`<div class="note">اضغط «اخفِ كلام الموظف»، قل جملة الموظف (أو الشخص A) بصوتك، وبعدين اسمعها وقارن. خلي حد يمثل الدور التاني أو مثّله بنفسك.</div><button class="b s w" onclick="view.hide=!view.hide;render()">${hide?'أظهر كلام الموظف':'اخفِ كلام الموظف'}</button>`+L.d.map(x=>`<div class="card" style="${x[0]=='A'?'border-right:5px solid var(--pri)':''}"><b>${isCC(i)?(x[0]=='A'?'🧑‍💼 الموظف':x[0]=='C'?'🙋 العميل':'🧑‍🏫 زميل/مشرف'):(x[0]=='A'?'🗣️ A':'🗨️ B')}</b>${x[0]=='A'&&hide?'<div class="ph">النص مخفي... قلها بصوتك</div>':`<div class="en" style="font-size:18px">${x[1]}</div><div class="ar">${x[2]}</div>`}${btn(x[1])}</div>`).join("")}
-else b=`<div class="card"><b>📘 شرح القاعدة</b><div class="ar" style="margin:8px 0">${L.n}</div><button class="b s" onclick="sayAr('${esc(L.n)}')">🔊 اسمع الشرح بالعربي</button><div class="ph">الصوت العربي بيعتمد على الأصوات المنزّلة في تليفونك.</div></div>${L.tip?`<div class="card" style="border-right:5px solid var(--pri)"><b>💡 نصيحة محترفين</b><div class="ar" style="margin:8px 0">${L.tip}</div><button class="b s" onclick="sayAr('${esc(L.tip)}')">🔊 اسمع النصيحة</button></div>`:''}`;
+else b=`<div class="card"><b>📘 شرح القاعدة</b><div class="ar" style="margin:8px 0">${L.n}</div><button class="b s" onclick="sayAr('${esc(L.n)}')">🔊 اسمع الشرح بالعربي</button><div class="ph">الصوت العربي بيعتمد على الأصوات المنزّلة في تليفونك.</div></div>${typeof gxCard=="function"?gxCard(i):""}${L.tip?`<div class="card" style="border-right:5px solid var(--pri)"><b>💡 نصيحة محترفين</b><div class="ar" style="margin:8px 0">${L.tip}</div><button class="b s" onclick="sayAr('${esc(L.tip)}')">🔊 اسمع النصيحة</button></div>`:''}`;
 $("#app").innerHTML=`<div class="row"><b>${isCC(i)?'🎧 كول سنتر':(L.lv?L.lv+' · الدرس '+L.ln:(i>=38?'A2 · الدرس '+(i-37):'الدرس '+(i+1)))}: ${L.e} ${L.t}</b><button class="b s" onclick="view=null;render()">رجوع</button></div>${tabs}${b}<button class="b w" onclick="startLesson(${i})">✍️ ابدأ اختبار الدرس</button>`;scrollTo(0,0)}
 function startLesson(i){T={name:`اختبار: ${LESSONS[i].t}`,qs:mkTest(items(i),10,true),i:0,ok:0,pass:70,after:p=>{S.done[i]=Math.max(S.done[i]||0,p);if(p>=70)S.xp+=20},back:"lesson",les:i};render()}
 // ---- shadowing recorder (no scoring: play model then your own voice) ----
