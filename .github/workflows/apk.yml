@@ -18,7 +18,7 @@ jobs:
       - name: Web files
         run: |
           mkdir -p www
-          cp index.html manifest.json sw.js www/
+          cp index.html manifest.json sw.js gx.js www/
           cp apk/capacitor.config.json capacitor.config.json
       - name: Capacitor
         run: |
