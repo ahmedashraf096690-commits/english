@@ -1,4 +1,4 @@
-const C="eng2-v5";const F=["./","./index.html","./manifest.json"];
+const C="eng2-v6";const F=["./","./index.html","./manifest.json","./gx.js"];
 self.addEventListener("install",e=>{self.skipWaiting();e.waitUntil(caches.open(C).then(c=>c.addAll(F.map(u=>new Request(u,{cache:"reload"})))))});
 self.addEventListener("activate",e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x.startsWith("eng2-")&&x!==C).map(x=>caches.delete(x)))).then(()=>clients.claim())));
 // network first (always fresh when online), cache fallback (offline)
